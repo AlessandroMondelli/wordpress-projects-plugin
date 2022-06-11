@@ -7,6 +7,20 @@ require_once PLUGIN_DIR . '/inc/class-project-functions.php';
 
 class AmProject {
     function __construct() {
+        add_action( 'wp_enqueue_scripts', array( $this, 'am_register_scripts' )); //Enqueue script
+        add_action( 'init', array( $this, 'am_register_style' )); //Enqueue style
+
         $projects_functions = new AmProjectFunctions();
+    }
+
+    //Registro jQuery
+    public function am_register_scripts() {
+        wp_enqueue_script( 'amprojects_jquery', PLUGIN_URL . 'js/script.js', array( 'jquery' ) );
+    }
+
+    //Registro Css
+    public function am_register_style() {
+        wp_register_style( 'amprojects_style', PLUGIN_URL . 'css/style.css' );
+        wp_enqueue_style( 'amprojects_style' );
     }
 }

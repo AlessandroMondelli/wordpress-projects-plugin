@@ -14,6 +14,7 @@ if( !defined('WPINC') ) {
 }
 
 define( 'PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); //Setto costante con path plugin
+define( 'PLUGIN_URL', plugin_dir_url(  __FILE__ ) ); //Setto costante con url plugin
 
 register_activation_hook( __FILE__, '\\am_activation' );
 function am_activation() {

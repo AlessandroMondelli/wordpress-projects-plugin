@@ -57,16 +57,16 @@ class AmProjectFunctions {
                 $pageImg = '';
             }
     
-            $discipl = get_the_terms($project->ID, 'discipline'); //Prendo tag pagine progetti
-            $anni = get_the_terms($project->ID, 'anni'); //Prendo tag pagine progetti
+            //$discipl = get_the_terms($project->ID, 'discipline'); //Prendo tag pagine progetti
+            //$anni = get_the_terms($project->ID, 'anni'); //Prendo tag pagine progetti
             
             if($j == 0 || $j % $n_elements_column == 0) {
-                $htmlStr .= '<div class="custom-posts__item post projects-col n-col-' . $n_col . ' col-sm-12 col-md-6 col-lg-4 col-xl-4 clearfix">'; 
+                $htmlStr .= '<div class="projects-col n-col-' . $n_col . ' amproj-col-sm-12 amproj-col-md-6 amproj-col-lg-4 amproj-col-xl-4 clearfix">'; 
     
                 $n_col++;
             }
             
-            $htmlStr .= '<div class="post-inner';
+            $htmlStr .= '<div class="amproj-inner';
             
             //@TODO Aggiungere taxonomies per creare filtri front-end
             // if( (isset($discipl) && (!empty($discipl))) ) {
@@ -84,10 +84,10 @@ class AmProjectFunctions {
             // }
             
             if($pageImg != '') {
-                $htmlStr .= '"><div class="post-thumbnail"> <a href="' . $pageLink . '" class="post-thumbnail__link"><img class="lazyload post-thumbnail__img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
+                $htmlStr .= '"><div class="amproj-thumbnail"> <a href="' . $pageLink . '" class="amproj-thumbnail-link"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
             }
     
-            $htmlStr .= '<div class="post-content-wrap"><a href="' . $pageLink . '" title="' . $pageTitle . '"><span>' . $pageTitle . '</span></a></div></div>';
+            $htmlStr .= '<div class="amproj-content-wrap"><a href="' . $pageLink . '" title="' . $pageTitle . '"><span class="amproj-title">' . $pageTitle . '</span></a></div></div>';
     
             if(($j + 1) % $n_elements_column == 0) {
                 $htmlStr .= '</div>';

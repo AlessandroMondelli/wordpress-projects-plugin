@@ -1,0 +1,84 @@
+/** 
+    Plugin Style
+**/
+
+ul.projects-filter {
+	margin: 10px 0;
+}
+
+.projects-col.n-col-1 {
+	padding: 0 10px 0 0;
+}
+
+.projects-col.n-col-3 {
+	padding: 0 0 0 10px;
+}
+
+.projects-col.n-col-2 {
+	padding: 0 10px;
+}
+
+
+.amproj-inner {
+	position: relative;
+    margin-bottom: 10px;
+}
+
+.amproj-thumbnail .amproj-thumbnail-img {
+	width: 100%;
+	transition: 0.5s;
+	max-height: 600px;
+	object-fit: cover;
+}
+
+.amproj-content-wrap {
+	position: absolute;
+  	top: 50%;
+ 	left: 50%;
+	transform: translate(-50%, -50%);
+    transition: 0.3s;
+	width: 85%;
+	height: 85%;
+}
+
+.amproj-content-wrap.active {
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+.amproj-content-wrap.active a {
+	opacity: 1;
+}
+
+.amproj-content-wrap a {
+	opacity: 0;
+	color: #000;
+	font-size: 20px;
+	display: inline-block;
+    width: 100%;
+    height: 100%;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.3s;
+}
+
+/* Media Queries */
+
+@media screen and (min-width: 320px) and (max-width: 767px){
+    .amproj-col-sm-12 {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px){
+    .amproj-col-md-6 {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 1024px){
+    .amproj-col-lg-4 {
+        width: 33%;
+    }
+}
