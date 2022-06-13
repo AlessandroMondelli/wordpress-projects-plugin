@@ -2,6 +2,45 @@
     Plugin Style
 **/
 
+.clearfix::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+/*Filtri*/
+
+.projects-filter {
+	list-style-type: none;
+	margin-right: 20px;
+	cursor: pointer;
+	transition: 0.2s;
+	color: #6d6d6d;
+	font-size: 20px;
+	padding: 10px 0;
+}
+
+.projects-filter li {
+	padding: 5px;
+	display: inline-block
+}
+
+.projects-filter li:hover, .projects-filter li.active {
+	color: black;
+}
+
+.projects-filter li:hover {
+	cursor: pointer;
+}
+
+/**/
+
+/** Griglia progetti **/
+
+#am-projects-wrap {
+	margin: 50px 0;
+}
+
 ul.projects-filter {
 	margin: 10px 0;
 }
@@ -27,7 +66,6 @@ ul.projects-filter {
 .amproj-thumbnail .amproj-thumbnail-img {
 	width: 100%;
 	transition: 0.5s;
-	max-height: 600px;
 	object-fit: cover;
 }
 
@@ -63,6 +101,8 @@ ul.projects-filter {
 	transition: 0.3s;
 }
 
+/**/
+
 /* Media Queries */
 
 @media screen and (min-width: 320px) and (max-width: 767px){
@@ -73,12 +113,21 @@ ul.projects-filter {
 
 @media screen and (min-width: 768px) and (max-width: 1023px){
     .amproj-col-md-6 {
+		float: left;
         width: 50%;
     }
 }
 
 @media screen and (min-width: 1024px){
     .amproj-col-lg-4 {
+		float: left;
+        width: 33%;
+    }
+}
+
+@media screen and (min-width: 1200px){
+    .amproj-col-lg-4 {
+		float: left;
         width: 33%;
     }
 }

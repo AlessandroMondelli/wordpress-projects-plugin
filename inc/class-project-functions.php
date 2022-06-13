@@ -25,6 +25,7 @@ class AmProjectFunctions {
                 ),
             'hierarchical' => true,
             'public'      => true,
+            'menu_icon' => 'dashicons-book',
             'rewrite'     => array( 'slug' => 'projects', 'with_front' => false, ),
             'supports' => array( 'title', 'editor', 'author', 'thumbnail', 
             'page-attributes'),
@@ -94,8 +95,10 @@ class AmProjectFunctions {
             'orderby'        => 'menu_order', 
             'order'          => 'ASC', 
         ));
+
+        echo $this->am_projects_filters( $posts );
     
-        $htmlStr = "";
+        $htmlStr = "<div id='am-projects-wrap' class='clearfix'>";
     
         $n_elements_column = ceil((count( $posts ) / 3));
     
@@ -115,7 +118,7 @@ class AmProjectFunctions {
             $anni = get_the_terms($project->ID, 'anni'); //Prendo tag pagine progetti
             
             if($j == 0 || $j % $n_elements_column == 0) {
-                $htmlStr .= '<div class="projects-col n-col-' . $n_col . ' amproj-col-sm-12 amproj-col-md-6 amproj-col-lg-4 amproj-col-xl-4 clearfix">'; 
+                $htmlStr .= '<div class="projects-col n-col-' . $n_col . ' amproj-col-sm-12 amproj-col-md-6 amproj-col-lg-4 amproj-col-xl-4">'; 
     
                 $n_col++;
             }
@@ -149,7 +152,52 @@ class AmProjectFunctions {
     
             $j++;
         }
-    
+        
+        $htmlStr .= '</div>';
+        return $htmlStr;
+    }
+
+    public function am_projects_filters( $projects ) {
+        $htmlStr = '<div id="am-projects-filter">'; //Inizializzo stringa
+        $htmlStr .= '<ul class="projects-filter all-disc">';
+        
+        $disc_array = []; //Array taxonomy discipline
+        $years_array = []; //Array taxonomy anni
+
+        foreach($projects as $project) { //Scorro progetti
+            $discipline = get_the_terms($project->ID, 'discipline'); //Prendo tag pagine progetti
+
+            if(isset($discipline) && is_array($discipline)) { //Se ancora non sono stati aggiunti nell'array
+                for($i = 0; $i < count($discipline); $i++) {
+                    if(($discipline[$i]->name != 'Projects') && (!(in_array($discipline[$i]->name, $disc_array)))) {
+                        $disc_array[] = $discipline[$i]->name; //Aggiungo all'array
+                        $htmlStr .= '<li class="project-filter discipline '. $discipline[$i]->name . '">' . $discipline[$i]->name . '</li>'; //Concateno a stringa
+                    }
+                }
+            }
+
+            $anni = get_the_terms($project->ID, 'anni'); //Prendo categorie pagine progetti
+
+            if(isset($anni) && is_array($anni)) { //Se ancora non sono stati aggiunti nell'array
+                for($i = 0; $i < count($anni); $i++) {
+                    if(($anni[$i]->name != 'Projects') && (!(in_array($anni[$i]->name, $years_array)))) {
+                        $years_array[] = $anni[$i]->name; //Aggiungo all'array
+                    }
+                }
+            }
+        }
+
+        $htmlStr .= '</ul><ul class="projects-filter all-years">';
+
+        sort($years_array); //Ordino array creato
+
+        for($i = 0; $i < count($years_array); $i++) {
+            $htmlStr .= '<li class="project-filter anni '. $years_array[$i] . '">' . $years_array[$i] . '</li>'; //Concateno a stringa
+        }
+
+
+        $htmlStr .= '</ul></div>';
+
         return $htmlStr;
     }
 }

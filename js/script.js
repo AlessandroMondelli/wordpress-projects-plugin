@@ -32,4 +32,101 @@ jQuery( function( $ ) {
           title.addClass("leave"); //Aggiungo classe per animazione leave
         }
       });
+
+      //Filtro front-end
+      $('.projects-filter .discipline').click(function() { //Al click del filtro
+        var catActive = ''; //Inizializzo variabile che controlla altro filtro
+  
+        $('.projects-filter .anni').each(function() { //Scorro selezione altro filtro
+            if($(this).hasClass('active')) //Se uno è attivo
+                catActive = $(this).text(); 
+        });
+  
+        if($(this).hasClass('active')) { //Se il filtro cliccato era già attivo
+            $(this).removeClass('active'); //Rimuovo classe attivo dal filtro
+  
+            if(catActive === undefined) { //Se non è attivo un altro filtro
+                $('.amproj-inner').fadeIn(); //Mostro tutti i progetti
+            } else { //Altrimenti
+                $('.amproj-inner').each(function() { //Scorro tutti i progetti
+                    var tag = $(this).attr('class'); //Prendo tag
+    
+                    if((tag.includes(catActive))) { //Se è presente il tag
+                        $(this).fadeIn(); //Mostro
+                    }
+                });
+            }
+            
+        } else {      
+            $('.projects-filter .discipline').each(function() {
+                if($(this).hasClass('active'))
+                    $(this).removeClass('active');
+            });
+  
+            var value = addClassAndGetValue($(this));
+  
+            $('.amproj-inner').each(function() { //Scorro progetti
+                var tag = $(this).attr('class'); //Prendo tag
+  
+                hideOrShowProjects($(this), value, tag, catActive);    
+            });
+        }
+    });
+  
+    $('.projects-filter .anni').click(function() { //Al click del filtro
+        var tagActive = ''; //Inizializzo variabile che controlla altro filtro
+  
+        $('.projects-filter .discipline').each(function() { //Scorro selezione altro filtro
+            if($(this).hasClass('active')) //Se uno è attivo
+                tagActive = $(this).text();
+        });
+  
+        if($(this).hasClass('active')) {
+            $(this).removeClass('active');
+  
+            if(tagActive === undefined) {
+                $('.amproj-inner').fadeIn();
+            } else {
+                $('.amproj-inner').each(function() {
+                    var cat = $(this).attr('class'); //Prendo tag
+    
+                    if((cat.includes(tagActive))) {
+                        $(this).fadeIn();
+                    }
+                });
+            }
+  
+        } else {      
+            $('.projects-filter .anni').each(function() {
+                if($(this).hasClass('active'))
+                    $(this).removeClass('active');
+            });
+  
+            var value = addClassAndGetValue($(this));
+  
+            $('.amproj-inner').each(function() { //Scorro progetti
+                var cat = $(this).attr('class'); //Prendo tag
+  
+                hideOrShowProjects($(this), value, cat, tagActive);     
+            });
+        }
+    });
+    
+    function addClassAndGetValue(thisValue) {
+        thisValue.addClass('active'); //Aggiungo classe per evidenziare opzione scelta
+        return thisValue.text(); //Prendo tag scelto
+    }
+  
+    function hideOrShowProjects(thisValue, choosenFilter, catTag, otherFilter ) {
+      thisValue.fadeOut(); //Nascondo
+
+      if(!( (catTag.includes(choosenFilter) && (catTag.includes(otherFilter) || otherFilter === undefined )))) { //Se il tag non è incluso nella classe
+          thisValue.fadeOut(); //Nascondo
+      } else { //Altrimenti 
+        setTimeout(function() {
+          thisValue.fadeIn(); //Mostro
+        }, 400)
+          
+      }
+    }
 });
