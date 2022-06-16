@@ -116,6 +116,9 @@ class AmProjectFunctions {
     
             $discipl = get_the_terms($project->ID, 'discipline'); //Prendo tag pagine progetti
             $anni = get_the_terms($project->ID, 'anni'); //Prendo tag pagine progetti
+
+            //Salvo in variabili i valori del custom metabox
+            $can_open_project = get_post_meta( $project->ID, 'no-link-select', true );
             
             if($j == 0 || $j % $n_elements_column == 0) {
                 $htmlStr .= '<div class="projects-col n-col-' . $n_col . ' amproj-col-sm-12 amproj-col-md-6 amproj-col-lg-4 amproj-col-xl-4">'; 
@@ -140,11 +143,38 @@ class AmProjectFunctions {
                 }
             }
             
-            if($pageImg != '') {
-                $htmlStr .= '"><div class="amproj-thumbnail"> <a href="' . $pageLink . '" class="amproj-thumbnail-link"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
-            }
+            if( $can_open_project != 'false' ) {
+                if($pageImg != '') {
+                    $htmlStr .= '"><div class="amproj-thumbnail"> <a href="' . $pageLink . '" class="amproj-thumbnail-link"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
+                }
+        
+                $htmlStr .= '<div class="amproj-content-wrap"><a href="' . $pageLink . '" title="' . $pageTitle . '"><span class="amproj-title">' . $pageTitle . '</span></a></div></div>';
+            } else {
+                $info_1 = get_post_meta( $project->ID, 'proj-info-1', true );
+                $info_2 = get_post_meta( $project->ID, 'proj-info-2', true );
+                $proj_year = get_post_meta( $project->ID, 'proj-year', true );
+
+                if($pageImg != '') {
+                    $htmlStr .= '"><div class="amproj-thumbnail"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
+                }
+
+                $htmlStr .= '<div class="amproj-content-wrap no-clickable"><p class="amproj-title"><span>' . $pageTitle . '</span>';
+
+                if(isset( $info_1 ) && !empty( $info_1 )) {
+                    $htmlStr .= '<span>' . $info_1 . '</span>';
+                }
     
-            $htmlStr .= '<div class="amproj-content-wrap"><a href="' . $pageLink . '" title="' . $pageTitle . '"><span class="amproj-title">' . $pageTitle . '</span></a></div></div>';
+                if(isset( $info_2 ) && !empty( $info_2 )) {
+                    $htmlStr .= '<span>' . $info_2 . '</span>';
+                }
+    
+                if(isset( $proj_year ) && !empty( $proj_year )) {
+                    $htmlStr .= '<span>' . $proj_year . '</span>';
+                }
+
+
+                $htmlStr .= '</p></div></div>';
+            }
     
             if(($j + 1) % $n_elements_column == 0) {
                 $htmlStr .= '</div>';

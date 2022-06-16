@@ -36,9 +36,10 @@
 /**/
 
 /** Griglia progetti **/
-
 #am-projects-wrap {
 	margin: 50px 0;
+	width: 100%;
+	max-width: 100%;
 }
 
 ul.projects-filter {
@@ -79,6 +80,11 @@ ul.projects-filter {
 	height: 85%;
 }
 
+.amproj-title {
+	height: 100%;
+	text-align: center;
+}
+
 .amproj-content-wrap.active {
 	background-color: rgba(255, 255, 255, 0.8);
 }
@@ -87,18 +93,29 @@ ul.projects-filter {
 	opacity: 1;
 }
 
-.amproj-content-wrap a {
+.amproj-content-wrap span {
 	opacity: 0;
 	color: #000;
-	font-size: 20px;
-	display: inline-block;
-    width: 100%;
-    height: 100%;
-	font-weight: bold;
+}
+
+.amproj-content-wrap.no-clickable p {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: 0.3s;
+	flex-direction: column;
+	margin: 0;
+}
+
+.amproj-content-wrap.no-clickable span {
+	margin-bottom: 10px;
+}
+
+.amproj-content-wrap.no-clickable span:hover {
+	cursor: default;
+}
+
+.amproj-content-wrap.active span {
+	opacity: 1;
 }
 
 /**/
