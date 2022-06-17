@@ -11,7 +11,7 @@ class AmProjectMetaBoxes {
     protected function set_hooks() {
         add_action( 'add_meta_boxes', [ $this, 'am_add_no_link_metabox' ] );
 
-        add_action( 'save_post_am_projects', [ $this, 'am_save_no_link_proj_box' ], 10, 2 );
+        add_action( 'save_post_am_projects', [ $this, 'am_save_no_link_proj_box' ], 10, 3 );
     }
 
     //Creo nuovo metabox
@@ -21,6 +21,9 @@ class AmProjectMetaBoxes {
 
     //Markup metabox
     public function am_no_link_proj_box_markup( $post ) {
+        //Creo nonce
+        wp_nonce_field( 'am_no_link_metabox_action', 'am_no_link_metabox_nonce' );
+
         //Prendo valore salvato nel database
         $no_link_value = get_post_meta( $post->ID, 'no-link-select', true ); 
         ?>
@@ -56,7 +59,7 @@ class AmProjectMetaBoxes {
     }
 
     //Metodo per salvare nel database i dati presi dal metabox
-    public function am_save_no_link_proj_box( $post_id, $post ) {
+    public function am_save_no_link_proj_box( $post_id, $post, $update ) {
         //Controllo prima di inviare i dati...
         //Se l'utente è abilitato a modificare i post
         if( !current_user_can( 'edit_post', $post_id ) )
@@ -69,6 +72,12 @@ class AmProjectMetaBoxes {
         $cpt_check = "am_projects";
         if( $cpt_check != $post->post_type )
             return $post_id;
+
+        //Controllo Nonce
+        if( $update && ! wp_verify_nonce( $_POST[ 'am_no_link_metabox_nonce' ], 'am_no_link_metabox_action' ) ) {
+            echo 'Errore, Nonce non verificato';
+            exit;
+        }
 
         //Procedo al salvataggio dei dati
         $no_link_select_value = '';

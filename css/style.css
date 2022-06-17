@@ -58,7 +58,6 @@ ul.projects-filter {
 	padding: 0 10px;
 }
 
-
 .amproj-inner {
 	position: relative;
     margin-bottom: 10px;
@@ -80,9 +79,10 @@ ul.projects-filter {
 	height: 85%;
 }
 
-.amproj-title {
-	height: 100%;
-	text-align: center;
+.amproj-content-wrap.clickable {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .amproj-content-wrap.active {
@@ -116,6 +116,11 @@ ul.projects-filter {
 
 .amproj-content-wrap.active span {
 	opacity: 1;
+}
+
+.amproj-title {
+	height: 100%;
+	text-align: center;
 }
 
 /**/

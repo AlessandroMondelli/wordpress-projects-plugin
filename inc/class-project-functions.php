@@ -148,7 +148,7 @@ class AmProjectFunctions {
                     $htmlStr .= '"><div class="amproj-thumbnail"> <a href="' . $pageLink . '" class="amproj-thumbnail-link"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
                 }
         
-                $htmlStr .= '<div class="amproj-content-wrap"><a href="' . $pageLink . '" title="' . $pageTitle . '"><span class="amproj-title">' . $pageTitle . '</span></a></div></div>';
+                $htmlStr .= '<div class="amproj-content-wrap clickable"><a href="' . $pageLink . '" title="' . $pageTitle . '"><span class="amproj-title">' . $pageTitle . '</span></a></div></div>';
             } else {
                 $info_1 = get_post_meta( $project->ID, 'proj-info-1', true );
                 $info_2 = get_post_meta( $project->ID, 'proj-info-2', true );
