@@ -153,12 +153,13 @@ class AmProjectFunctions {
                 $info_1 = get_post_meta( $project->ID, 'proj-info-1', true );
                 $info_2 = get_post_meta( $project->ID, 'proj-info-2', true );
                 $proj_year = get_post_meta( $project->ID, 'proj-year', true );
+                $spotlight = get_post_meta( $project->ID, 'proj-spotlight-switch', true );
 
                 if($pageImg != '') {
-                    $htmlStr .= '"><div class="amproj-thumbnail"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
+                    $htmlStr .= '"><div class="amproj-thumbnail' . ( $spotlight == 'true' ? " spotlight" : "" ) . '"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
                 }
 
-                $htmlStr .= '<div class="amproj-content-wrap no-clickable"><p class="amproj-title"><span>' . $pageTitle . '</span>';
+                $htmlStr .= '<div class="amproj-content-wrap no-clickable' . ( $spotlight == 'true' ? " spotlight-cursor" : "" ) . '"><p class="amproj-title"><span>' . $pageTitle . '</span>';
 
                 if(isset( $info_1 ) && !empty( $info_1 )) {
                     $htmlStr .= '<span>' . $info_1 . '</span>';

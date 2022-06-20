@@ -41,6 +41,8 @@ class AmProjectMetaBoxes {
             $proj_info_1 = get_post_meta($post->ID, "proj-info-1", true);
             $proj_info_2 = get_post_meta($post->ID, "proj-info-2", true);
             $proj_year = get_post_meta($post->ID, "proj-year", true);
+            $proj_spotlight = get_post_meta($post->ID, "proj-spotlight-switch", true);
+
         ?>
             <div class="proj-extra-data-wrap" style="margin: 10px 0">
                 <label for="proj-info-1" style="font-weight:bold;">Inserisci prima riga info</label>
@@ -54,6 +56,14 @@ class AmProjectMetaBoxes {
                 <label for="proj-year" style="font-weight:bold;">Inserisci anno</label>
                 <input name="proj-year" type="text" id="proj-year" value="<?php echo $proj_year != '' ? $proj_year : '' ?>">
             </div>
+            <div class="proj-extra-data-wrap" style="margin: 20px 0">
+                <label for="proj-spotlight-switch" style="font-weight:bold;">Lightbox con click</label>
+                <select name="proj-spotlight-switch" id="proj-spotlight-switch" style="margin-top: 20px">
+                    <option value="true" <?php selected( $proj_spotlight, 'true' ); ?>>Attivo</option>
+                    <option value="false" <?php selected( $proj_spotlight, 'false' ); ?>>Disattivato</option>
+                </select>
+            </div>
+            
         <?php
         }
     }
@@ -90,23 +100,30 @@ class AmProjectMetaBoxes {
         if( $no_link_select_value == 'false' ) {
             $info_1 = '';
             if( isset( $_POST[ 'proj-info-1' ] ) ) {
-                $info_1 = $_POST[ 'proj-info-1' ];
+                $info_1 = sanitize_text_field( $_POST[ 'proj-info-1' ] );
 
                 update_post_meta( $post_id, 'proj-info-1', $info_1 );
             }
 
             $info_2 = '';
             if( isset( $_POST[ 'proj-info-2' ] ) ) {
-                $info_2 = $_POST[ 'proj-info-2' ];
+                $info_2 = sanitize_text_field( $_POST[ 'proj-info-2' ] );
 
                 update_post_meta( $post_id, 'proj-info-2', $info_2);
             }
 
             $proj_year = '';
             if( isset( $_POST[ 'proj-year' ] ) ) {
-                $proj_year = $_POST[ 'proj-year' ];
+                $proj_year = sanitize_text_field( $_POST[ 'proj-year' ] );
 
                 update_post_meta( $post_id, 'proj-year', $proj_year );
+            }
+
+            $proj_spotlight = '';
+            if( isset( $_POST[ 'proj-spotlight-switch' ] ) ) {
+                $proj_spotlight = $_POST[ 'proj-spotlight-switch' ];
+
+                update_post_meta( $post_id, 'proj-spotlight-switch', $proj_spotlight );
             }
         }
     }

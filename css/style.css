@@ -110,8 +110,16 @@ ul.projects-filter {
 	margin-bottom: 10px;
 }
 
-.amproj-content-wrap.no-clickable span:hover {
+.amproj-content-wrap.no-clickable:hover, .amproj-thumbnail:hover {
 	cursor: default;
+}
+
+.amproj-content-wrap {
+	cursor: pointer;
+}
+
+.amproj-content-wrap.no-clickable.spotlight-cursor:hover, .amproj-thumbnail.spotlight {
+	cursor: pointer;
 }
 
 .amproj-content-wrap.active span {
@@ -121,6 +129,30 @@ ul.projects-filter {
 .amproj-title {
 	height: 100%;
 	text-align: center;
+}
+
+/**/
+
+/** Spotlight **/
+
+.amproj-wrap-spotlight {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+	z-index: 99999;
+	background-color: rgba(0,0,0, 0.9);
+	transition: all 0.3 ease;
+}
+
+.amproj-img-spotlight {
+	width: 50%;
+	position: relative;
+	top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /**/

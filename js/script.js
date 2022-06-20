@@ -129,4 +129,22 @@ jQuery( function( $ ) {
           
       }
     }
+
+    //Spotlight 
+    $(".amproj-inner").click(function() {
+        var el = $(this);
+
+        if( el.find(".amproj-thumbnail").hasClass("spotlight") && !$(".amproj-wrap-spotlight").length ) {
+          var img = el.find(".amproj-thumbnail-img").attr("src");
+          console.log(img);
+          $("main").append("<div class='amproj-wrap-spotlight active'><img class='amproj-img-spotlight' src='" + img + "'></div>");
+        }
+    });
+
+    //Rimuovo spotlight al click
+    $(document).on("click", ".amproj-wrap-spotlight" ,function() {
+        if($(this).hasClass("active")) {
+            $(this).remove();
+        }
+    });
 });
