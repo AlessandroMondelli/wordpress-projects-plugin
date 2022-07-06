@@ -5,6 +5,7 @@
 
 require_once PLUGIN_DIR . '/inc/class-project-functions.php';
 require_once PLUGIN_DIR . '/inc/class-meta-boxes.php';
+require_once ADMIN_PLUGIN_DIR . '/inc/class-menus.php';
 
 class AmProject {
     function __construct() {
@@ -13,6 +14,7 @@ class AmProject {
 
         $projects_functions = new AmProjectFunctions();
         $projects_meta_boxes = new AmProjectMetaBoxes();
+        $projects_submenus = new AmProjectMenus();
     }
 
     //Registro jQuery
@@ -24,5 +26,8 @@ class AmProject {
     public function am_register_style() {
         wp_register_style( 'amprojects_style', PLUGIN_URL . 'css/style.css' );
         wp_enqueue_style( 'amprojects_style' );
+
+        wp_register_style( 'amprojects_admin_style', ADMIN_PLUGIN_URL . '/css/style.css' );
+        wp_enqueue_style( 'amprojects_admin_style' );
     }
 }

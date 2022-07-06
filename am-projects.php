@@ -15,6 +15,8 @@ if( !defined('WPINC') ) {
 
 define( 'PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); //Setto costante con path plugin
 define( 'PLUGIN_URL', plugin_dir_url(  __FILE__ ) ); //Setto costante con url plugin
+define( 'ADMIN_PLUGIN_DIR', plugin_dir_path( __FILE__ ) . 'admin' ); //Setto costante con path sezione admin
+define( 'ADMIN_PLUGIN_URL', plugin_dir_url( __FILE__ ) . 'admin' ); //Setto costante con url sezione admin
 
 register_activation_hook( __FILE__, '\\am_activation' );
 function am_activation() {
