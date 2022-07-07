@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe che crea contiene metodi riguardanti i progetti
+ * Classe che contiene metodi riguardanti i progetti
  */
 
 class AmProjectFunctions {
@@ -9,82 +9,7 @@ class AmProjectFunctions {
     }
 
     protected function set_hooks() {
-        add_action( 'init', [ $this, 'am_register_projects' ] );
-        add_action( 'init', [ $this, 'am_register_taxonomies' ] );
-
         add_shortcode( 'am_projects_shortcode', [ $this, 'am_projects_html' ] );
-    }
-
-    public function am_register_projects() {
-        register_post_type('am_projects',
-            array(
-                'labels'      => array(
-                    'name'          => __('Progetti', 'am-projects'),
-                    'singular_name' => __('Progetto', 'am-projects'),
-                    'add_new_item' 	=> __('Aggiungi nuovo progetto', 'am-projects'),
-                ),
-            'hierarchical' => true,
-            'public'      => true,
-            'menu_icon' => 'dashicons-book',
-            'rewrite'     => array( 'slug' => 'projects', 'with_front' => false, ),
-            'supports' => array( 'title', 'editor', 'author', 'thumbnail', 
-            'page-attributes'),
-            )
-        );
-
-        flush_rewrite_rules();
-    }
-
-    //Nuove taxonomies
-    function am_register_taxonomies() {
-        $labels_discipl = array(
-            'name'              => _x( 'Discipline', 'Discipline progetto' ),
-            'singular_name'     => _x( 'Disciplina', 'Disciplina progetto' ),
-            'search_items'      => __( 'Cerca disciplina' ),
-            'all_items'         => __( 'Tutte le discipline' ),
-            'parent_item'       => __( 'Disciplina padre' ),
-            'parent_item_colon' => __( 'Disciplina padre:' ),
-            'edit_item'         => __( 'Modifica disciplina' ),
-            'update_item'       => __( 'Aggiorna disciplina' ),
-            'add_new_item'      => __( 'Aggiungi nuova disciplina' ),
-            'new_item_name'     => __( 'Nome nuova disciplina' ),
-            'menu_name'         => __( 'Discipline' ),
-        );
-
-        $args_discipl   = array(
-            'hierarchical'      => true,
-            'labels'            => $labels_discipl,
-            'show_ui'           => true,
-            'show_admin_column' => true,
-            'show_in_rest'      => true,
-            'query_var'         => true,
-            'rewrite'           => [ 'slug' => 'disciplina' ],
-        );
-
-        $labels_years = array(
-            'name'              => _x( 'Anno', 'Anno progetto' ),
-            'singular_name'     => _x( 'Anno', 'Anno progetto' ),
-            'search_items'      => __( 'Cerca anno' ),
-            'all_items'         => __( 'Tutti gli anni' ),
-            'edit_item'         => __( 'Modifica anno' ),
-            'update_item'       => __( 'Aggiorna anno' ),
-            'add_new_item'      => __( 'Aggiungi nuovo anno' ),
-            'new_item_name'     => __( 'Nuovo anno' ),
-            'menu_name'         => __( 'Anni' ),
-        );
-
-        $args_years   = array(
-            'hierarchical'      => false,
-            'labels'            => $labels_years,
-            'show_ui'           => true,
-            'show_admin_column' => true,
-            'show_in_rest'      => true,
-            'query_var'         => true,
-            'rewrite'           => [ 'slug' => 'anno' ],
-        );
-
-        register_taxonomy( 'discipline', [ 'am_projects' ], $args_discipl );
-        register_taxonomy( 'anni', [ 'am_projects' ], $args_years );
     }
 
     public function am_projects_html() {
@@ -99,8 +24,9 @@ class AmProjectFunctions {
         echo $this->am_projects_filters( $posts );
     
         $htmlStr = "<div id='am-projects-wrap' class='clearfix'>";
-    
-        $n_elements_column = ceil((count( $posts ) / 3));
+        
+        $n_columns_user = get_option( 'n_columns' );
+        $n_elements_column = ceil((count( $posts ) / $n_columns_user));
     
         $j = 0; //Contatore progetti
         $n_col = 1; //Contatore colonne
@@ -120,9 +46,32 @@ class AmProjectFunctions {
             //Salvo in variabili i valori del custom metabox
             $can_open_project = get_post_meta( $project->ID, 'no-link-select', true );
             
-            if($j == 0 || $j % $n_elements_column == 0) {
-                $htmlStr .= '<div class="projects-col n-col-' . $n_col . ' amproj-col-sm-12 amproj-col-md-6 amproj-col-lg-4 amproj-col-xl-4">'; 
-    
+            if($j == 0 || ( $j % $n_elements_column == 0 )) {
+                $htmlStr .= '<div class="projects-col n-col-' . $n_col . ' amproj-col-sm-12 amproj-col-md-6 '; 
+                
+                switch ( $n_columns_user ) {
+                    case 1: 
+                        $htmlStr .= 'amproj-col-lg-12 amproj-col-xl-12">';
+                    break;
+                    case 2: 
+                        $htmlStr .= 'amproj-col-lg-6 amproj-col-xl-6">';
+                    break;
+                    case 3: 
+                        $htmlStr .= 'amproj-col-lg-4 amproj-col-xl-4">';
+                    break;
+                    case 4: 
+                        $htmlStr .= 'amproj-col-lg-3 amproj-col-xl-3">';
+                    break;
+                    case 5: 
+                        $htmlStr .= 'amproj-col-lg-2 amproj-col-xl-2">';
+                    break;
+                    case 6: 
+                        $htmlStr .= 'amproj-col-lg-1 amproj-col-xl-1">';
+                    break;
+                    default:
+                        $htmlStr .= 'amproj-col-lg-3 amproj-col-xl-3">';
+                }
+
                 $n_col++;
             }
             
