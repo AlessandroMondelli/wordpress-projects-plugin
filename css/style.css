@@ -57,7 +57,7 @@ ul.projects-filter {
 
 .amproj-thumbnail .amproj-thumbnail-img {
 	width: 100%;
-	transition: 0.5s;
+	transition: all 0.5s;
 	object-fit: cover;
 }
 
@@ -145,6 +145,18 @@ ul.projects-filter {
 	top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+/**/
+
+/**Lazyload**/
+
+.amproj-lazyload {
+	opacity: 0;
+}
+
+.amproj-lazyload.visible {
+	opacity: 1;
 }
 
 /**/

@@ -47,6 +47,7 @@ class AmProjectMenus {
     }
 
     public function add_layout_options() {
+        //Numero colonne
         add_settings_section(
             'layout_section', //ID univoco
             'Layout progetti', //Titolo
@@ -66,6 +67,27 @@ class AmProjectMenus {
             'layout_group',
             'n_columns',
         );  
+
+        //Lazyload
+        add_settings_section(
+            'lazyload_section', //ID univoco
+            'Lazyload', //Titolo
+            [ $this, 'add_lazyload_section_function' ], //funzione di callback
+            'layout_progetti' //page
+        );
+        
+        add_settings_field(
+            'lazyload_field', //ID univoco 
+            'Abilita Lazyload', //Titolo
+            [ $this, 'add_lazyload_fields_function' ], //funzione di callback
+            'layout_progetti', //page
+            'lazyload_section' //ID sezione
+        );
+
+        register_setting(
+            'layout_group',
+            'lazyload_bool',
+        );
     }
 
     public function add_layout_section_function() {
@@ -75,6 +97,20 @@ class AmProjectMenus {
     public function add_layout_fields_function() {
         ?>
         <input name="n_columns" id="n_columns" type="number" min="1" max="6" value="<?php echo get_option('n_columns')?>">
+        <?php
+    }
+
+    public function add_lazyload_section_function() {
+        echo 'Abilita il lazyload delle copertine per ottimizzare il caricamento della pagina';
+    }
+
+    public function add_lazyload_fields_function() {
+        $lazy_value = get_option('lazyload_bool');
+        ?>
+        <select name="lazyload_bool" id="lazyload_bool">
+            <option value="false" <?php echo $lazy_value == 'false' ? "selected" : ''  ?>>Disattivato</option>
+            <option value="true" <?php echo $lazy_value == 'true' ? "selected" : ''  ?> >Attivato</option>
+        </select>
         <?php
     }
 }

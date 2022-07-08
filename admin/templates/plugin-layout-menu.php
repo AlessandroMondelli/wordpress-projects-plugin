@@ -10,10 +10,13 @@ if( !defined( 'ABSPATH' ) ) {
 ?>
 
 <form method="post" action="options.php">
-    <?php settings_errors() ?>
+    <?php 
+    settings_errors();
 
-    <?php settings_fields( 'layout_group' ) ?>
-    <?php do_settings_sections( 'layout_progetti' ) ?>
+    settings_fields( 'layout_group' );
+    do_settings_sections( 'layout_progetti' );
+    
+    ?>
 
     <?php submit_button() ?>
 </form>
