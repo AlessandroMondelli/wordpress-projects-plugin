@@ -11,7 +11,7 @@ if( !defined( 'ABSPATH' ) ) {
 
 <form method="post" action="options.php">
     <?php 
-    settings_errors();
+    settings_errors( 'layout_errors' );
 
     settings_fields( 'layout_group' );
     do_settings_sections( 'layout_progetti' );

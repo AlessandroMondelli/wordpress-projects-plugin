@@ -60,12 +60,18 @@ class AmProjectMenus {
             'Numero colonne progetti', //Titolo
             [ $this, 'add_layout_fields_function' ], //funzione di callback
             'layout_progetti', //page
-            'layout_section' //ID sezione
+            'layout_section', //ID sezione
+            [
+                'name' => 'n_columns',
+                'id' => 'n_columns',
+                'value' => get_option( 'n_columns' )
+            ],
         );
 
         register_setting(
             'layout_group',
             'n_columns',
+            [ $this, 'validate_n_columns' ]
         );  
 
         //Lazyload
@@ -81,12 +87,22 @@ class AmProjectMenus {
             'Abilita Lazyload', //Titolo
             [ $this, 'add_lazyload_fields_function' ], //funzione di callback
             'layout_progetti', //page
-            'lazyload_section' //ID sezione
+            'lazyload_section', //ID sezione,
+            [
+                'name' => 'lazyload_bool',
+                'id' => 'lazyload_bool',
+                'value' => get_option( 'lazyload_bool' ),
+                'options' => [
+                    'false' => 'Disattivato',
+                    'true' => 'Attivato'
+                ]
+            ]
         );
 
         register_setting(
             'layout_group',
             'lazyload_bool',
+            [ $this, 'validate_lazyload' ]
         );
     }
 
@@ -94,23 +110,60 @@ class AmProjectMenus {
         echo 'Scegli il layout che preferisci per i tuoi progetti';
     }
 
-    public function add_layout_fields_function() {
+    //Funzione campo input numero di colonne griglia
+    public function add_layout_fields_function( $args ) {
+        $name = ( isset( $args[ 'name' ] ) ) ? $args[ 'name' ] : '';
+        $id = ( isset( $args[ 'id' ] ) ) ? $args[ 'id' ] : '';
+        $value = ( isset( $args[ 'value' ] ) ) ? $args[ 'value' ] : '';
+
         ?>
-        <input name="n_columns" id="n_columns" type="number" min="1" max="6" value="<?php echo get_option('n_columns')?>">
+        <input name="<?php echo $name ?>" id="<?php echo $id ?>" type="number" min="1" max="6" value="<?php echo $value ?>">
         <?php
+    }
+
+    public function validate_n_columns( $args ) {
+        if( ! ( isset( $args ) ) || empty( $args ) || $args < '1' || $args > '6' ) {
+            $value = 3; //setto valore base da ritornare
+            add_settings_error( 'layout_errors', 'invalid_n_columns', 'Qualcosa è andata storto, riprova.' );
+        } else {
+            $value = sanitize_text_field( $args );
+        }
+
+        return $value;
     }
 
     public function add_lazyload_section_function() {
         echo 'Abilita il lazyload delle copertine per ottimizzare il caricamento della pagina';
     }
 
-    public function add_lazyload_fields_function() {
-        $lazy_value = get_option('lazyload_bool');
+    //Funzione campo input lazyload
+    public function add_lazyload_fields_function( $args ) {
+        $name = ( isset( $args[ 'name' ] ) ) ? $args[ 'name' ] : '';
+        $id = ( isset( $args[ 'id' ] ) ) ? $args[ 'id' ] : '';
+        $lazy_value = ( isset( $args[ 'value' ] ) ) ? $args[ 'value' ] : '';
+
+        $options = ( isset( $args[ 'options' ] ) && is_array( $args[ 'options' ] ) ) ? $args[ 'options' ] : [];
         ?>
-        <select name="lazyload_bool" id="lazyload_bool">
-            <option value="false" <?php echo $lazy_value == 'false' ? "selected" : ''  ?>>Disattivato</option>
-            <option value="true" <?php echo $lazy_value == 'true' ? "selected" : ''  ?> >Attivato</option>
+        <select name="<?php echo $name ?>" id="<?php echo $id ?>">
+        <?php
+            foreach( $options as $key => $option ) {
+        ?>
+                <option <?php selected( $lazy_value, $key ) ?> value="<?php echo $key ?>"><?php echo $option ?></option>
+        <?php
+            }
+        ?>  
         </select>
         <?php
+    }
+
+    public function validate_lazyload($args) {
+        if( ! ( isset( $args ) ) || empty( $args ) || ( strlen( $args ) > 5 ) ) {
+            $value = 'false'; //setto valore base da ritornare
+            add_settings_error( 'layout_errors', 'invalid_lazyload', 'Qualcosa è andata storto, riprova.' );
+        } else {
+            $value = sanitize_text_field( $args );
+        }
+
+        return $value;
     }
 }
