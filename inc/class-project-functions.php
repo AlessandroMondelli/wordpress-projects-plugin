@@ -21,10 +21,8 @@ class AmProjectFunctions {
             'order'          => 'ASC', 
         ));
 
-        echo $this->am_projects_filters( $posts );
+        echo $this->am_projects_filters( $posts ); //Stampo filtri
     
-        $htmlStr = "<div id='am-projects-wrap' class='clearfix'>";
-        
         $n_columns_user = get_option( 'n_columns' );
         $n_elements_column = ceil((count( $posts ) / $n_columns_user));
 
@@ -32,7 +30,10 @@ class AmProjectFunctions {
     
         $j = 0; //Contatore progetti
         $n_col = 1; //Contatore colonne
-    
+        $col_count = 0; //Contatore per colonne
+        
+        $htmlStr = "<div id='am-projects-wrap' class='clearfix'>";
+
         foreach($posts as $project) { //Scorro progetti
             $pageTitle = $project->post_title; //Prendo titolo
             $pageLink = get_permalink($project->ID); //Prendo link pagina progetto
@@ -74,6 +75,7 @@ class AmProjectFunctions {
                         $htmlStr .= 'amproj-col-lg-3 amproj-col-xl-3">';
                 }
 
+                $col_count = 0;
                 $n_col++;
             }
             
@@ -97,7 +99,7 @@ class AmProjectFunctions {
             if( $can_open_project != 'false' ) {
                 if( $pageImg != '' ) {
                     if( $lazyload_value == 'true' ) {
-                        if($j < 2 || $j == $n_elements_column || $j == $n_elements_column + 1 || $j  == ( $n_elements_column * 2 ) || $j == ( $n_elements_column * 2 ) + 1 ) {
+                        if( $col_count < 2 ) {
                             $htmlStr .= '"><div class="amproj-thumbnail"> <a href="' . $pageLink . '" class="amproj-thumbnail-link"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
                         } else {
                             $htmlStr .= '"><div class="amproj-thumbnail"> <a href="' . $pageLink . '" class="amproj-thumbnail-link"><img class="amproj-lazyload amproj-thumbnail-img" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
@@ -117,7 +119,7 @@ class AmProjectFunctions {
 
                 if($pageImg != '') {
                     if( $lazyload_value == 'true' ) {
-                        if($j < 2 || $j == $n_elements_column || $j == $n_elements_column + 1 || $j  == ( $n_elements_column * 2 ) || $j == ( $n_elements_column * 2 ) + 1 ) {
+                        if( $col_count < 2 ) {
                             $htmlStr .= '"><div class="amproj-thumbnail' . ( $spotlight == 'true' ? " spotlight" : "" ) . '"><img class="amproj-thumbnail-img" src="' . $pageImg . '" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>';
                         } else {
                             $htmlStr .= '"><div class="amproj-thumbnail"> <a href="' . $pageLink . '" class="amproj-thumbnail-link"><img class="amproj-lazyload amproj-thumbnail-img" data-src="' . $pageImg . '" alt="' . $pageTitle . '"></a></div>'; 
@@ -149,7 +151,8 @@ class AmProjectFunctions {
             if(($j + 1) % $n_elements_column == 0) {
                 $htmlStr .= '</div>';
             }
-    
+            
+            $col_count++;
             $j++;
         }
         
