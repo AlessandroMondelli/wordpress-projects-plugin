@@ -32,5 +32,8 @@ class AmProject {
 
         wp_register_style( 'amprojects_admin_style', ADMIN_PLUGIN_URL . '/css/style.css' );
         wp_enqueue_style( 'amprojects_admin_style' );
+
+        wp_register_style( 'amprojects_user_styles', PLUGIN_URL . 'css/project-active-style.css' );
+        wp_enqueue_style( 'amprojects_user_styles');
     }
 }

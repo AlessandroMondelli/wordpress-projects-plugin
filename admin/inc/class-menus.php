@@ -72,7 +72,34 @@ class AmProjectMenus {
             'layout_group',
             'n_columns',
             [ $this, 'validate_n_columns' ]
-        );  
+        );
+
+        //Stile progetto - Colore sfondo
+        add_settings_section( 
+            'layout_background_section',
+            'Colore Background titolo',
+            [ $this, 'add_background_section_function' ],
+            'layout_progetti'
+        );
+
+        add_settings_field(
+            'background_field',
+            'Colore background',
+            [ $this, 'add_background_function' ],
+            'layout_progetti',
+            'layout_background_section',
+            [
+                'name' => 'project_background',
+                'id' => 'project_background',
+                'value' => get_option( 'project_background' )
+            ],
+        );
+
+        register_setting(
+            'layout_group',
+            'project_background',
+            [ $this, 'create_style_file' ],
+        );
 
         //Lazyload
         add_settings_section(
@@ -134,6 +161,41 @@ class AmProjectMenus {
 
     public function add_lazyload_section_function() {
         echo 'Abilita il lazyload delle copertine per ottimizzare il caricamento della pagina';
+    }
+
+    //Funzione campo background color
+    public function add_background_section_function() {
+        echo 'Scegli il colore di sfondo per il titolo del progetto';
+    }
+
+    public function add_background_function( $args ) {
+        $name = ( isset( $args[ 'name' ] ) ) ? $args[ 'name' ] : '';
+        $id = ( isset( $args[ 'id' ] ) ) ? $args[ 'id' ] : '';
+        $color = ( isset( $args[ 'value' ] ) ) ? $args[ 'value' ] : '';
+        ?>
+        <input name="<?php echo $name ?>" id="<?php echo $id ?>" type="color" value="<?php echo $color ?>">
+        <?php
+    }
+
+    public function create_style_file( $args ) {
+        if( file_exists( PLUGIN_DIR . 'css/project-active-style.css' ) ) {
+            file_put_contents( PLUGIN_DIR . 'css/project-active-style.css', '' );
+        }
+
+        if( ! ( isset( $args ) ) || empty( $args ) ) {
+            $color = 'rgba( 0, 0, 0, 0.8 )';
+            $style = '.amproj-content-wrap.active { background-color: rgba( 0, 0, 0, 0.8 ) }';
+        } else {
+            $color = $args;
+            $style = '.amproj-content-wrap.active { background-color: ' . $args .' };';  
+        }
+
+        file_put_contents(
+            PLUGIN_DIR . 'css/project-active-style.css',
+            $style,
+        );
+
+        return $color;
     }
 
     //Funzione campo input lazyload

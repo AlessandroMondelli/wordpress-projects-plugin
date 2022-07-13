@@ -77,10 +77,6 @@ ul.projects-filter {
 	justify-content: center;
 }
 
-.amproj-content-wrap.active {
-	background-color: rgba(255, 255, 255, 0.8);
-}
-
 .amproj-content-wrap.active a {
 	opacity: 1;
 }
