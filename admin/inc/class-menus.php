@@ -4,6 +4,8 @@
  * 
  */
 
+require_once ADMIN_PLUGIN_DIR . '/inc/admin-functions.php';
+
 class AmProjectMenus {
     public function __construct() {
         $this->set_hooks();
@@ -74,7 +76,7 @@ class AmProjectMenus {
             [ $this, 'validate_n_columns' ]
         );
 
-        //Stile progetto - Colore sfondo
+        //Stile progetto
         add_settings_section( 
             'layout_background_section',
             'Colore Background titolo',
@@ -82,6 +84,7 @@ class AmProjectMenus {
             'layout_progetti'
         );
 
+        //Colore sfondo
         add_settings_field(
             'background_field',
             'Colore background',
@@ -101,6 +104,7 @@ class AmProjectMenus {
             [ $this, 'check_background_title_file' ],
         );
 
+        //Colore testo
         add_settings_field(
             'text_color_field',
             'Colore testo',
@@ -118,6 +122,26 @@ class AmProjectMenus {
             'layout_group',
             'project_text_color',
             [ $this, 'check_color_title_file' ],
+        );
+
+        //Dimensione testo
+        add_settings_field(
+            'font_size_field',
+            'Dimensione testo',
+            [ $this, 'add_text_size_function' ],
+            'layout_progetti',
+            'layout_background_section',
+            [
+                'name' => 'project_text_size',
+                'id' => 'project_text_size',
+                'value' => get_option( 'project_text_size' )
+            ],
+        );
+
+        register_setting(
+            'layout_group',
+            'project_text_size',
+            [ $this, 'check_project_text_size_file' ],
         );
 
         //Lazyload
@@ -178,13 +202,12 @@ class AmProjectMenus {
         return $value;
     }
 
-    public function add_lazyload_section_function() {
-        echo 'Abilita il lazyload delle copertine per ottimizzare il caricamento della pagina';
-    }
-
     //Funzione campo background color
     public function add_background_section_function() {
-        echo 'Scegli il colore di sfondo per il titolo del progetto';
+    ?>
+        <p>Scegli i colori per il titolo del progetto</p>
+        <img class="amprojects-admin-img" src="<?php echo ADMIN_PLUGIN_URL . '/src/media/projects-colors.jpg' ?>">
+    <?php
     }
 
     public function add_background_function( $args ) {
@@ -206,6 +229,16 @@ class AmProjectMenus {
         <?php
     }
 
+    //Funzione campo size testo
+    public function add_text_size_function( $args ) {
+        $name = ( isset( $args[ 'name' ] ) ) ? $args[ 'name' ] : '';
+        $id = ( isset( $args[ 'id' ] ) ) ? $args[ 'id' ] : '';
+        $size = ( isset( $args[ 'value' ] ) ) ? $args[ 'value' ] : '';
+        ?>
+        <input name="<?php echo $name ?>" id="<?php echo $id ?>" type="number" min="1" max="100" value="<?php echo $size ?>">
+        <?php
+    }
+
     //Funzioni per aggiornare file css
     public function check_background_title_file( $args ) {
         $file_name = PLUGIN_DIR . 'css/project-active-style.css';
@@ -219,7 +252,7 @@ class AmProjectMenus {
         $class_to_replace = '\.amproj-content-wrap\.active{ background-color: .{0,30} }';
         $style = '.amproj-content-wrap.active{ background-color: ' . $color .' }';  
 
-        $this -> replace_file_text( $class_to_replace, $style, $file_name );
+        replace_file_text( $class_to_replace, $style, $file_name );
 
         return $color;
     }
@@ -236,26 +269,37 @@ class AmProjectMenus {
         $class_to_replace = '\.amproj-content-wrap .amproj-title{ color: .{0,30} }';
         $style = '.amproj-content-wrap .amproj-title{ color: ' . $color .' }';  
 
-        $this -> replace_file_text( $class_to_replace, $style, $file_name );
+        replace_file_text( $class_to_replace, $style, $file_name );
 
         return $color;
     }
 
-    public function replace_file_text( $old_string, $new_string, $file_name ) {
-        $str = file_get_contents( $file_name );
-        
-        if( !empty( $str ) ) {
-            $out = [];
-            $var = preg_match( '/' . $old_string . '/', $str, $out );
-            $str = str_replace( $out[0], $new_string, $str );
+    public function check_project_text_size_file( $args ) {
+        $file_name = PLUGIN_DIR . 'css/project-active-style.css';
+        $size_value = intval( $args );
+
+        if( ! ( isset( $args ) ) || empty( $args ) || ( $size_value  < 1 ) || ( $size_value  > 100 ) ) {
+            $size = 16;
         } else {
-            $str = $new_string;
+            $size = $size_value;
         }
-        
-        file_put_contents( $file_name, $str );
+
+        $class_to_replace = '\.amproj-content-wrap span{ font-size: .{0,30} }';
+        $style = '.amproj-content-wrap span{ font-size: ' . $size .'px }';  
+
+        replace_file_text( $class_to_replace, $style, $file_name );
+
+        return $size;
     }
 
     //Funzione campo input lazyload
+    public function add_lazyload_section_function() {
+    ?>
+        <p>Abilita il lazyload delle copertine per ottimizzare il caricamento della pagina</p>
+        <video class="amprojects-admin-video" controls src="<?php echo ADMIN_PLUGIN_URL . '/src/media/video_lazyload.mp4' ?>" type="video/mp4"></video>
+    <?php
+    }
+
     public function add_lazyload_fields_function( $args ) {
         $name = ( isset( $args[ 'name' ] ) ) ? $args[ 'name' ] : '';
         $id = ( isset( $args[ 'id' ] ) ) ? $args[ 'id' ] : '';
@@ -278,7 +322,7 @@ class AmProjectMenus {
     public function validate_lazyload($args) {
         if( ! ( isset( $args ) ) || empty( $args ) || ( strlen( $args ) > 5 ) ) {
             $value = 'false'; //setto valore base da ritornare
-            add_settings_error( 'layout_errors', 'invalid_lazyload', 'Qualcosa è andata storto, riprova.' );
+            add_settings_error( 'layout_errors', 'invalid_lazyload', 'Qualcosa è andata storto con l\'opzione "Abilita lazyload", riprova.' );
         } else {
             $value = sanitize_text_field( $args );
         }
