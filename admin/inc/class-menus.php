@@ -98,7 +98,26 @@ class AmProjectMenus {
         register_setting(
             'layout_group',
             'project_background',
-            [ $this, 'create_style_file' ],
+            [ $this, 'check_background_title_file' ],
+        );
+
+        add_settings_field(
+            'text_color_field',
+            'Colore testo',
+            [ $this, 'add_text_color_function' ],
+            'layout_progetti',
+            'layout_background_section',
+            [
+                'name' => 'project_text_color',
+                'id' => 'project_text_color',
+                'value' => get_option( 'project_text_color' )
+            ],
+        );
+
+        register_setting(
+            'layout_group',
+            'project_text_color',
+            [ $this, 'check_color_title_file' ],
         );
 
         //Lazyload
@@ -177,25 +196,63 @@ class AmProjectMenus {
         <?php
     }
 
-    public function create_style_file( $args ) {
-        if( file_exists( PLUGIN_DIR . 'css/project-active-style.css' ) ) {
-            file_put_contents( PLUGIN_DIR . 'css/project-active-style.css', '' );
-        }
+    //Funzione campo text color
+    public function add_text_color_function( $args ) {
+        $name = ( isset( $args[ 'name' ] ) ) ? $args[ 'name' ] : '';
+        $id = ( isset( $args[ 'id' ] ) ) ? $args[ 'id' ] : '';
+        $color = ( isset( $args[ 'value' ] ) ) ? $args[ 'value' ] : '';
+        ?>
+        <input name="<?php echo $name ?>" id="<?php echo $id ?>" type="color" value="<?php echo $color ?>">
+        <?php
+    }
+
+    //Funzioni per aggiornare file css
+    public function check_background_title_file( $args ) {
+        $file_name = PLUGIN_DIR . 'css/project-active-style.css';
 
         if( ! ( isset( $args ) ) || empty( $args ) ) {
             $color = 'rgba( 0, 0, 0, 0.8 )';
-            $style = '.amproj-content-wrap.active { background-color: rgba( 0, 0, 0, 0.8 ) }';
         } else {
-            $color = $args;
-            $style = '.amproj-content-wrap.active { background-color: ' . $args .' };';  
+            $color = $args;     
         }
 
-        file_put_contents(
-            PLUGIN_DIR . 'css/project-active-style.css',
-            $style,
-        );
+        $class_to_replace = '\.amproj-content-wrap\.active{ background-color: .{0,30} }';
+        $style = '.amproj-content-wrap.active{ background-color: ' . $color .' }';  
+
+        $this -> replace_file_text( $class_to_replace, $style, $file_name );
 
         return $color;
+    }
+
+    public function check_color_title_file( $args ) {
+        $file_name = PLUGIN_DIR . 'css/project-active-style.css';
+
+        if( ! ( isset( $args ) ) || empty( $args ) ) {
+            $color = '#000';
+        } else {
+            $color = $args;
+        }
+
+        $class_to_replace = '\.amproj-content-wrap .amproj-title{ color: .{0,30} }';
+        $style = '.amproj-content-wrap .amproj-title{ color: ' . $color .' }';  
+
+        $this -> replace_file_text( $class_to_replace, $style, $file_name );
+
+        return $color;
+    }
+
+    public function replace_file_text( $old_string, $new_string, $file_name ) {
+        $str = file_get_contents( $file_name );
+        
+        if( !empty( $str ) ) {
+            $out = [];
+            $var = preg_match( '/' . $old_string . '/', $str, $out );
+            $str = str_replace( $out[0], $new_string, $str );
+        } else {
+            $str = $new_string;
+        }
+        
+        file_put_contents( $file_name, $str );
     }
 
     //Funzione campo input lazyload
