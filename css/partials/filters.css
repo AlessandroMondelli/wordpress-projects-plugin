@@ -1,0 +1,26 @@
+/*Filtri*/
+
+.projects-filter {
+	list-style-type: none;
+	margin-right: 20px;
+	cursor: pointer;
+	transition: 0.2s;
+	color: #6d6d6d;
+	font-size: 20px;
+	padding: 10px 0;
+}
+
+.projects-filter li {
+	padding: 5px;
+	display: inline-block
+}
+
+.projects-filter li:hover, .projects-filter li.active {
+	color: black;
+}
+
+.projects-filter li:hover {
+	cursor: pointer;
+}
+
+/**/

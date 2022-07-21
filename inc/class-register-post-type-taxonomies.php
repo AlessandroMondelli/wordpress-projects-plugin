@@ -39,17 +39,17 @@ class AmProjectPostTypeAndTaxonomies {
     //Nuove taxonomies
     function am_register_taxonomies() {
         $labels_discipl = array(
-            'name'              => _x( 'Discipline', 'Discipline progetto' ),
-            'singular_name'     => _x( 'Disciplina', 'Disciplina progetto' ),
-            'search_items'      => __( 'Cerca disciplina' ),
-            'all_items'         => __( 'Tutte le discipline' ),
-            'parent_item'       => __( 'Disciplina padre' ),
-            'parent_item_colon' => __( 'Disciplina padre:' ),
-            'edit_item'         => __( 'Modifica disciplina' ),
-            'update_item'       => __( 'Aggiorna disciplina' ),
-            'add_new_item'      => __( 'Aggiungi nuova disciplina' ),
-            'new_item_name'     => __( 'Nome nuova disciplina' ),
-            'menu_name'         => __( 'Discipline' ),
+            'name'              => _x( 'Discipline', 'Discipline progetto', 'am-projects' ),
+            'singular_name'     => _x( 'Disciplina', 'Disciplina progetto', 'am-projects' ),
+            'search_items'      => __( 'Cerca disciplina', 'am-projects' ),
+            'all_items'         => __( 'Tutte le discipline', 'am-projects' ),
+            'parent_item'       => __( 'Disciplina padre', 'am-projects' ),
+            'parent_item_colon' => __( 'Disciplina padre:', 'am-projects' ),
+            'edit_item'         => __( 'Modifica disciplina', 'am-projects' ),
+            'update_item'       => __( 'Aggiorna disciplina', 'am-projects' ),
+            'add_new_item'      => __( 'Aggiungi nuova disciplina', 'am-projects' ),
+            'new_item_name'     => __( 'Nome nuova disciplina', 'am-projects' ),
+            'menu_name'         => __( 'Discipline', 'am-projects' ),
         );
 
         $args_discipl   = array(
@@ -63,15 +63,15 @@ class AmProjectPostTypeAndTaxonomies {
         );
 
         $labels_years = array(
-            'name'              => _x( 'Anno', 'Anno progetto' ),
-            'singular_name'     => _x( 'Anno', 'Anno progetto' ),
-            'search_items'      => __( 'Cerca anno' ),
-            'all_items'         => __( 'Tutti gli anni' ),
-            'edit_item'         => __( 'Modifica anno' ),
-            'update_item'       => __( 'Aggiorna anno' ),
-            'add_new_item'      => __( 'Aggiungi nuovo anno' ),
-            'new_item_name'     => __( 'Nuovo anno' ),
-            'menu_name'         => __( 'Anni' ),
+            'name'              => _x( 'Anno', 'Anno progetto', 'am-projects' ),
+            'singular_name'     => _x( 'Anno', 'Anno progetto', 'am-projects' ),
+            'search_items'      => __( 'Cerca anno', 'am-projects' ),
+            'all_items'         => __( 'Tutti gli anni', 'am-projects' ),
+            'edit_item'         => __( 'Modifica anno', 'am-projects' ),
+            'update_item'       => __( 'Aggiorna anno', 'am-projects' ),
+            'add_new_item'      => __( 'Aggiungi nuovo anno', 'am-projects' ),
+            'new_item_name'     => __( 'Nuovo anno', 'am-projects' ),
+            'menu_name'         => __( 'Anni', 'am-projects' ),
         );
 
         $args_years   = array(
