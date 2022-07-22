@@ -6,7 +6,8 @@
 require_once PLUGIN_DIR . '/inc/class-register-post-type-taxonomies.php';
 require_once PLUGIN_DIR . '/inc/class-project-functions.php';
 require_once PLUGIN_DIR . '/inc/class-meta-boxes.php';
-require_once ADMIN_PLUGIN_DIR . '/inc/class-menus.php';
+require_once ADMIN_PLUGIN_DIR . '/inc/class-shortcode-menu.php';
+require_once ADMIN_PLUGIN_DIR . '/inc/class-layout-menu.php';
 
 
 class AmProject {
@@ -17,7 +18,8 @@ class AmProject {
         $project_post_type = new AmProjectPostTypeAndTaxonomies();
         $projects_functions = new AmProjectFunctions();
         $projects_meta_boxes = new AmProjectMetaBoxes();
-        $projects_submenus = new AmProjectMenus();
+        $projects_shortcode_menu = new AmProjectsMenuShortcode();
+        $projects_layout_menu = new AmProjectLayoutMenu();
     }
 
     //Registro jQuery
