@@ -16,7 +16,7 @@ class AmProjectsMenuShortcode extends AmProjectMenus {
     }
 
     public function shortcode_submenu() {
-        parent::add_options_submenu( 'edit.php?post_type=am_projects', 'Shortcode progetti', 'Shortcode progetti', 'manage_options', 'shortcode_progetti', [ $this, 'add_shortcode_submenu' ], '' );
+        parent::add_options_submenu( 'edit.php?post_type=am_projects', 'Shortcode progetti', 'Shortcode progetti', 'manage_options', 'shortcode_progetti', [ $this, 'add_shortcode_submenu' ], 5 );
     }
 
     public function add_shortcode_submenu() {

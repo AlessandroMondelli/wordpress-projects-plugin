@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Plugin Name:       AM Projects
+ * Plugin Name:       AMDEV Projects
  * Description:       Crea un custom post type e mette a disposizione uno shortcode per stamparne il contenuto
  * Version:           1.0
  * Author:            Alessandro Mondelli
@@ -9,24 +10,26 @@
  * Text Domain:       am-projects
  */
 
-if( !defined('WPINC') ) {
+if (!defined('WPINC')) {
     die;
 }
 
-define( 'PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); //Setto costante con path plugin
-define( 'PLUGIN_URL', plugin_dir_url(  __FILE__ ) ); //Setto costante con url plugin
-define( 'ADMIN_PLUGIN_DIR', plugin_dir_path( __FILE__ ) . 'admin' ); //Setto costante con path sezione admin
-define( 'ADMIN_PLUGIN_URL', plugin_dir_url( __FILE__ ) . 'admin' ); //Setto costante con url sezione admin
+define('PLUGIN_DIR', plugin_dir_path(__FILE__)); //Setto costante con path plugin
+define('PLUGIN_URL', plugin_dir_url(__FILE__)); //Setto costante con url plugin
+define('ADMIN_PLUGIN_DIR', plugin_dir_path(__FILE__) . 'admin'); //Setto costante con path sezione admin
+define('ADMIN_PLUGIN_URL', plugin_dir_url(__FILE__) . 'admin'); //Setto costante con url sezione admin
 
-register_activation_hook( __FILE__, '\\am_activation' );
-function am_activation() {
+register_activation_hook(__FILE__, '\\am_activation');
+function am_activation()
+{
     require_once PLUGIN_DIR . '/inc/class-activator.php';
 
     AmActivator::activator();
 }
 
-register_deactivation_hook( __FILE__, '\\am_deactivation' );
-function am_deactivation() {
+register_deactivation_hook(__FILE__, '\\am_deactivation');
+function am_deactivation()
+{
     require_once PLUGIN_DIR . '/inc/class-deactivator.php';
 
     AmDeactivator::deactivator();

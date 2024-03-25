@@ -17,8 +17,8 @@ for( $i = 0; $i < count( $options ); $i++ ) {
 }
 
 //Elimino dati custom post type
-$all_projects = get_posts( array('post_type'=>'am_projects','numberposts'=>-1) );
+$all_projects = get_posts( [ 'post_type'=>'am_projects','numberposts' => -1 ] );
 
-foreach ($all_projects as $project) {
+foreach ( $all_projects as $project ) {
   wp_delete_post( $project->ID, true );
 }
