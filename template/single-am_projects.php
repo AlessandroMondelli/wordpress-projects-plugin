@@ -32,6 +32,9 @@ while(have_posts()) : the_post();
   $icons_ids_array = !empty($icons_ids) ? explode(',', $icons_ids) : array();
   $icons_ids_active = get_post_meta($post->ID, 'projects-icons-active', true);
   $icons_ids_active_array = !empty($icons_ids_active) ? explode(',', $icons_ids_active) : array();
+
+  //Recupero auto scroll
+  $auto_scroll = get_post_meta($post->ID, 'projects-auto-scroll', true);
   ?>
     <section class="am-projects-container">
       <div class="am-projects-thumbnail-wrap">
@@ -59,7 +62,9 @@ while(have_posts()) : the_post();
                         <div class="am-projects-details-list-el-progress-bar-wrap">
                           <div class="am-projects-details-list-el-progress-bar-active" data-perc="<?php echo $project_detail_content ?>"></div>
                         </div>
+                        <span class="am-projects-details-list-el-content"><?php echo $project_detail_content ?>%</span>
                       <?php
+                      continue;
                     }
                   ?>
                   <span class="am-projects-details-list-el-content"><?php echo $project_detail_content ?></span>
@@ -75,8 +80,12 @@ while(have_posts()) : the_post();
               ?>
               
                 <div class="am-projects-icons-tooltip-el <?php echo in_array($icon_id, $icons_ids_active_array) ? 'active' : '' ?>">
-                  <p class="am-projects-icons-tooltip-el-caption"><?php echo wp_get_attachment_caption($icon_id); ?></p>
-                  <?php 
+                  <?php
+                  if(wp_get_attachment_caption($icon_id) !== "") {
+                  ?>
+                    <p class="am-projects-icons-tooltip-el-caption"><?php echo wp_get_attachment_caption($icon_id); ?></p>
+                  <?php
+                  }
                     echo wp_get_attachment_image($icon_id);   
                   ?>
                 </div>
@@ -86,7 +95,7 @@ while(have_posts()) : the_post();
             </div>
           </div>
           <div class="am-projects-gallery">
-            <div class="am-projects-gallery-swiper-wrapper">
+            <div class="am-projects-gallery-swiper-wrapper" data-auto-scroll="<?php echo $auto_scroll ?>">
             <?php
               foreach($gallery_ids_array as $i=>$gallery_el) {
                 echo $i == 0 ? "<figure class='am-projects-gallery-el last-duplicate'>" . wp_get_attachment_image($gallery_ids_array[count($gallery_ids_array) - 1], [650, 550], "", ["class" => "am-projects-gallery-el-responsive"]) . "</figure>" : null;

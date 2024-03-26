@@ -3,22 +3,22 @@ jQuery(document).ready(function($) {
       e.preventDefault();
 
       const hiddenInputGallery = $('#projects-gallery-images');
-      const previewGallery = $('.am-gallery-current-selection-preview');
+      const imagesWrapper = $('.am-gallery-preview');
       
-      openCustomUploader('immagine', 'immagini', true, 'image', hiddenInputGallery, previewGallery);
+      openCustomUploader('immagine', 'immagini', true, 'image', hiddenInputGallery, imagesWrapper, false);
   });
 
   $('#am_icons_tooltip_button').click(function(e) {
     e.preventDefault();
 
     const hiddenInputIcons = $('#projects-icons-tooltip-input');
-    const previewIcons = $('.am-icons-tooltip-current-selection-preview');
+    const iconsWrapper = $('.am-icons-tooltip-preview');
 
-    openCustomUploader('icona', 'icone', true, 'image', hiddenInputIcons, previewIcons);
+    openCustomUploader('icona', 'icone', true, 'image', hiddenInputIcons, iconsWrapper, true);
   });
 
   //Funzione che permette di avviare media uploader
-  function openCustomUploader(multipleMediaName, singularMediaName, isMultiple, mediaType, hiddenInputEl, previewEl) {
+  function openCustomUploader(multipleMediaName, singularMediaName, isMultiple, mediaType, hiddenInputEl, mediaContainer, tooltipSupport) {
     const custom_uploader = wp.media({
       title: 'Seleziona ' + multipleMediaName,
       button: {
@@ -31,23 +31,47 @@ jQuery(document).ready(function($) {
     })
     .on('select', function() {
       const selection = custom_uploader.state().get('selection');
-      const media_ids = [];
-      let img_html = '<div class="media-preview">';
+      const media_ids = hiddenInputEl.val().length !== 0 ? hiddenInputEl.val().split(',').map(Number) : [];
 
       selection.each(function(attachment) {
-          media_ids.push(attachment.id);
-          img_html += '<img class="media-el" src="' + attachment.attributes.url + '" style="max-width: 50px;" data-id="' + attachment.id + '"/>';
-      });
+        if(!media_ids.includes(attachment.id)) {
+          //Creo wrapper html in base a supporto tooltip
+          const wrapperHTML = tooltipSupport ? '<div class="am-icons-tooltip-preview-el img-preview-el" data-id="' + attachment.id + '" style="position:relative"> ' : '<div class="gallery-el img-preview-el" data-id="' + attachment.id + '" style="position:relative"> ';
 
-      img_html += '</div>'
+          mediaContainer.append(
+            wrapperHTML +
+            '<p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>' +
+            '<img src="' + attachment.attributes.url  + '" style="max-width: 250px;" />' +
+            '</div>'
+          );
+
+          media_ids.push(attachment.id);
+        }
+      });
 
       hiddenInputEl.val(media_ids.join(',')); //Join della stringa per trasformare in array
       //Aggiornamento anteprima
-      previewEl.empty().append(img_html);
     })
     .open();
   }
 
+  //Rimozione elementi
+  $(document).on('click', '.remove-el', function(e) {
+    //Recupero id da eliminare
+    const idToDelete = Number($(this).parent().attr('data-id'));
+    //Elemento input
+    const hiddenInput = $(this).closest('.am-images-container').siblings('.projects-images-hidden-input');
+
+    //Modifico valori attivi
+    let activeImagesArr = hiddenInput.val().split(',').map(Number);
+    activeImagesArr = activeImagesArr.filter(el => el !== idToDelete);
+    hiddenInput.val(activeImagesArr.join(','));
+
+    //Rimuovo icona immagine
+    $(".img-preview-el[data-id=" + idToDelete + "]").remove();
+  });
+
+  //Attivazione/disattivazione icona
   $(document).on('click', '.am-icons-tooltip-preview-el', function(e) {
     //Prendo id selezionato
     const selectedId = $(this).attr('data-id');

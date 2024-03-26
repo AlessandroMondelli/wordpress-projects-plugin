@@ -40,7 +40,7 @@ class AmProjectMetaBoxes
         $no_link_value = get_post_meta($post->ID, 'no-link-select', true);
     ?>
         <div id="no-link-box">
-            <label for="no-link-select" style="font-weight:bold;">Seleziona interazione progetto</label>
+            <label for="no-link-select" style="display:block; font-weight:bold;">Seleziona interazione progetto</label>
             <select name="no-link-select" id="no-link-select" style="margin-top: 10px">
                 <option value="true" <?php selected($no_link_value, 'true'); ?>>Cliccabile</option>
                 <option value="false" <?php selected($no_link_value, 'false'); ?>>Non cliccabile</option>
@@ -81,8 +81,7 @@ class AmProjectMetaBoxes
     }
 
     //Markup metabox dettagli progetto
-    public function am_projects_details($post)
-    {
+    public function am_projects_details($post) {
         //Creo nonce
         wp_nonce_field('am_projects_details_metabox_action', 'am_projects_details_metabox_nonce');
 
@@ -143,27 +142,32 @@ class AmProjectMetaBoxes
         //Recupero immagini da db
         $media_ids = get_post_meta($post->ID, 'projects-gallery-images', true);
         $media_ids_array = !empty($media_ids) ? explode(',', $media_ids) : array();
+
+        //Recupero auto scroll
+        $auto_scroll = get_post_meta($post->ID, 'projects-auto-scroll', true);
         ?>
         <a href="#" id="am_gallery_button" class="button" style="margin-top:25px">Seleziona Immagini</a>
+        <label for="projects-auto-scroll" style="display:block; font-weight:bold; margin-top:25px">Secondi Auto Scroll (0 per disattivare)</label>
+        <input type="number" step="0.1" min="0" max="10" name="projects-auto-scroll" id="projects-auto-scroll" style="margin-top:10px" value="<?php echo $auto_scroll != "" ? $auto_scroll : 0 ?>">
 
-        <div class="am-gallery-current">
+        <div class="am-gallery-current am-images-container">
             <p style="margin-top:25px; font-weight:bold;">Immagini presenti nella galleria</p>
             <div class="am-gallery-preview" style="display: flex; flex-wrap: wrap; gap: 50px; margin-top: 15px">
             <?php
-                //Stampa preview immagini presenti in galleria
+                //Stampa preview icone con tooltip
                 foreach ($media_ids_array as $media_id) {
-                    echo '<div class="gallery-el"><img src="' . wp_get_attachment_url($media_id) . '" style="max-width: 250px;" /></div>';
+                ?>
+                    <div class="gallery-el img-preview-el" data-id="<?php echo $media_id ?>" style="position:relative">
+                        <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>
+                        <img src="<?php echo wp_get_attachment_url($media_id) ?>" style="max-width: 250px;" />
+                    </div>
+                <?php
                 }
             ?>
             </div>
         </div>
 
-        <div id="am_gallery_current_selection">
-            <p style="margin-top:25px; font-weight:bold;">Immagini selezionate</p>
-            <div class="am-gallery-current-selection-preview" style="display: flex; gap: 50px; margin-top: 15px"></div>
-        </div>
-
-        <input type="hidden" name="projects-gallery-images" id="projects-gallery-images" value="<?php echo esc_attr($media_ids)?>" />
+        <input type="hidden" name="projects-gallery-images" id="projects-gallery-images" class="projects-images-hidden-input" value="<?php echo esc_attr($media_ids)?>" />
         <?php
     }
 
@@ -180,17 +184,16 @@ class AmProjectMetaBoxes
         ?>
          <a href="#" id="am_icons_tooltip_button" class="button" style="margin-top:25px">Seleziona Icone</a>
 
-        <div class="am-icons-tooltip-current">
+        <div class="am-icons-tooltip-current am-images-container">
             <p style="margin-top:25px; font-weight:bold;">Icone presenti</p>
             <div class="am-icons-tooltip-preview" style="display: flex; flex-wrap: wrap; gap: 50px; margin-top: 15px">
             <?php
                 //Stampa preview icone con tooltip
                 foreach ($icons_ids_array as $icon_id) {
                 ?>
-                    <div class="am-icons-tooltip-preview-el" data-id="<?php echo $icon_id ?>" style="position:relative">
-                        <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 2px 5px; border-radius: 10px; background-color: white; z-index: 99; cursor: pointer">X</p>
-                        <img src="<?php echo wp_get_attachment_url($icon_id) ?>" style="max-width: 100px; <?php echo in_array($icon_id, $icons_ids_active_array) ? "filter:contrast(1);" : "filter:contrast(0);" ?> cursor: pointer" />
-                        <p style="text-align:center"><?php wp_get_attachment_caption($icon_id) ?></p>
+                    <div class="am-icons-tooltip-preview-el img-preview-el" data-id="<?php echo $icon_id ?>" style="position:relative">
+                        <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>
+                        <img src="<?php echo wp_get_attachment_url($icon_id) ?>" style="max-width: 250px; <?php echo in_array($icon_id, $icons_ids_active_array) ? "filter:contrast(1);" : "filter:contrast(0);" ?> cursor: pointer" />
                     </div>
                 <?php
                 }
@@ -198,12 +201,7 @@ class AmProjectMetaBoxes
             </div>
         </div>
 
-        <div id="am_icons_tooltips_current_selection">
-            <p style="margin-top:25px; font-weight:bold;">Icone selezionate</p>
-            <div class="am-icons-tooltip-current-selection-preview" style="display: flex; gap: 50px; margin-top: 15px"></div>
-        </div>
-
-        <input type="hidden" name="projects-icons-tooltip-input" id="projects-icons-tooltip-input" value="<?php echo esc_attr($icons_ids)?>" />
+        <input type="hidden" name="projects-icons-tooltip-input" id="projects-icons-tooltip-input" class="projects-images-hidden-input" value="<?php echo esc_attr($icons_ids)?>" />
         <input type="hidden" name="projects-icons-active" id="projects-icons-active" value="<?php echo esc_attr($icons_ids_active)?>" />
     <?php
     }
@@ -363,6 +361,11 @@ class AmProjectMetaBoxes
         if (isset($_POST['projects-gallery-images'])) {
             $media_ids = sanitize_text_field($_POST['projects-gallery-images']); 
             update_post_meta($post_id, 'projects-gallery-images', $media_ids);
+        }
+
+        if(isset($_POST['projects-auto-scroll'])) {
+            $auto_scroll = $_POST['projects-auto-scroll'];
+            update_post_meta($post_id, 'projects-auto-scroll', $auto_scroll);
         }
     }
 

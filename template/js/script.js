@@ -2,6 +2,10 @@ jQuery(function ($) {
   const slidesN = $(".am-projects-gallery-swiper-wrapper").children().length;
   let currentSlide = 1;
   let isMoving = false;
+  const autoMovingIntervalTime = $(".am-projects-gallery-swiper-wrapper").data("auto-scroll");
+  let autoMovingIntervalTimeId;
+
+  //Scroll prima slide
   moveSlides();
 
   //Funzione che controlla se elemento è in viewport
@@ -38,24 +42,27 @@ jQuery(function ($) {
 
   //Gallery 
   //Su click frecce
-  $(".swipe-forward").click(function(e) {
+  $(".swipe-forward").click(function() {
     if(isMoving) return;
-    
-    currentSlide++
-    isMoving = true;
-
-    $(".am-projects-gallery-swiper-wrapper").css({"transition":"transform 0.8s ease"});
+    swipeForward();
     moveSlides();
   });
 
-  $(".swipe-back").click(function(e) {
+  $(".swipe-back").click(function() {
     if(isMoving) return;
-
-    isMoving = true;
-    currentSlide--
-
-    $(".am-projects-gallery-swiper-wrapper").css({"transition":"transform 0.8s ease"});
+    swipeBack();
     moveSlides();
+  });
+
+  //Auto slide
+  activateAutoMoving();
+  
+  $(".am-projects-gallery").on("mouseenter", function() {
+    clearInterval(autoMovingIntervalTimeId);
+  });
+
+  $(".am-projects-gallery").on("mouseleave", function() {
+    activateAutoMoving();
   });
 
   //Alla fine della trasizione
@@ -76,6 +83,28 @@ jQuery(function ($) {
       moveSlides();
     }
   });
+
+  function activateAutoMoving() {
+    if(autoMovingIntervalTime > 0) {
+      autoMovingIntervalTimeId = setInterval(function() {
+        swipeForward();
+      }, autoMovingIntervalTime * 1000)
+    }
+  }
+
+  function swipeForward() {
+    currentSlide++
+    isMoving = true;
+    $(".am-projects-gallery-swiper-wrapper").css({"transition":"transform 0.8s ease"});
+    moveSlides();
+  }
+
+  function swipeBack() {
+    currentSlide--
+    isMoving = true;
+    $(".am-projects-gallery-swiper-wrapper").css({"transition":"transform 0.8s ease"});
+    moveSlides();
+  }
 
   //Funzione per muovere slide
   function moveSlides() {
