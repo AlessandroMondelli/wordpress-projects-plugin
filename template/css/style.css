@@ -38,7 +38,8 @@
 }
 
 .am-projects-details-list-el-progress-bar-wrap {
-  width: 100%;
+  width: 50%;
+  margin: 1rem auto;
   background-color: #eee;
 }
 
@@ -50,8 +51,9 @@
 
 /* Tooltips */
 .am-projects-icons-tooltip-wrap {
-  margin-top: 4rem;
+  margin: 4rem 0;
   display: flex;
+  justify-content: center;
   gap: 2rem;
 }
 
@@ -169,6 +171,15 @@
 
   .am-projects-details-list-el span {
     text-align: left;
+  }
+
+  .am-projects-details-list-el-progress-bar-wrap {
+    width: 100%;
+    margin: 0;
+  }
+
+  .am-projects-icons-tooltip-wrap {
+    justify-content: start;
   }
 }
 
