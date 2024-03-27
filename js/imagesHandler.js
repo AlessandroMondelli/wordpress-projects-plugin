@@ -1,4 +1,8 @@
 jQuery(document).ready(function($) {
+  //Ordinamento Drag&Drop
+  let currentOverEl;
+  let elPosEnd;
+
   $('#am_gallery_button').click(function(e) {
       e.preventDefault();
 
@@ -56,74 +60,7 @@ jQuery(document).ready(function($) {
     $('#projects-icons-active').val(activeValuesString);
   });
 
-  //Ordinamento Drag&Drop
-  let currentOverEl;
-  let elPosEnd;
-
-  $('.draggable').each(function() {
-    $(this).on('dragstart', function(e) {
-      $(this).addClass('dragging');
-
-      //Aggiungo classe per conoscere zona di drop
-      $(this).parent().addClass('drop-zone');
-    });
-
-    $(this).on('dragend', function(e) {
-      $(this).removeClass('dragging');
-      $(this).parent().removeClass('drop-zone');
-    });
-  });
-
-  $('.img-preview-el').each(function() {
-    $(this).on('dragover', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      //Calcolo posizione elemento
-      currentOverEl = $(this);
-      const draggingPos = e.pageX;
-      const elPos = $(this).offset().left;
-      const elCenterWidth = $(this).width() / 2;
-
-      //Se l'elemento draggato viene portato dopo la metà dell'elemento sottostante
-      if(draggingPos > (elPos + elCenterWidth)) {
-        elPosEnd = 'after';
-      } else {
-        elPosEnd = 'before';
-      }
-    });
-
-    $(this).on('drop', function(e) {  
-      //Prendo elementi
-      const wrapEl = $(this).parent();
-
-      //Se non è zona di drop giusta termino operazione
-      if(!wrapEl.hasClass('drop-zone')) return;
-
-      //Prendo elemento input
-      const hiddenInput = wrapEl.parent().parent().find('.projects-images-hidden-input');
-      //Recupero elemento dragging 
-      const el = $('.dragging');
-
-      //inizializzo array
-      const newOrderArr = [];
-
-      //Posiziono elemento in base a posizione
-      if(elPosEnd === 'after') {
-        currentOverEl.after(el);
-      } else {
-        currentOverEl.before(el);
-      }
-
-      //Salvo in array valori con nuovo ordine
-      wrapEl.children().each(function() {
-        newOrderArr.push($(this).attr('data-id'));
-      });
-      
-      //Inserisco valori in input
-      hiddenInput.val(newOrderArr.join(','));
-    });
-  });
+  setDragDropHandlers();
 
   //Funzione che permette di avviare media uploader
   function openCustomUploader(multipleMediaName, singularMediaName, isMultiple, mediaType, hiddenInputEl, mediaContainer, tooltipSupport) {
@@ -144,7 +81,7 @@ jQuery(document).ready(function($) {
       selection.each(function(attachment) {
         if(!media_ids.includes(attachment.id)) {
           //Creo wrapper html in base a supporto tooltip
-          const wrapperHTML = tooltipSupport ? '<div class="am-icons-tooltip-preview-el img-preview-el" data-id="' + attachment.id + '" style="position:relative"> ' : '<div class="gallery-el img-preview-el" data-id="' + attachment.id + '" style="position:relative"> ';
+          const wrapperHTML = tooltipSupport ? '<div class="am-icons-tooltip-preview-el img-preview-el draggable" data-id="' + attachment.id + '" style="position:relative"> ' : '<div class="gallery-el img-preview-el draggable" data-id="' + attachment.id + '" style="position:relative"> ';
 
           mediaContainer.append(
             wrapperHTML +
@@ -159,7 +96,84 @@ jQuery(document).ready(function($) {
 
       hiddenInputEl.val(media_ids.join(',')); //Join della stringa per trasformare in array
       //Aggiornamento anteprima
+
+      //Inizializzo drag&drop
+      setDragDropHandlers();
     })
     .open();
+  }
+
+  function setDragDropHandlers() {
+    $('.draggable').each(function() {
+      $(this).on('dragstart', function(){ initDragStart($(this)) });
+      $(this).on('dragend', function(){ initDragEnd($(this)) });
+    });
+  
+    $('.img-preview-el').each(function() {
+      $(this).on('dragover', function(e) { 
+        e.preventDefault();
+        e.stopPropagation();
+        initDragOver(e, $(this)) 
+      });
+  
+      $(this).on('drop', function(e) { initDrop($(this)) });
+    });
+  }
+
+  function initDragStart(el) {
+    el.addClass('dragging');  
+    //Aggiungo classe per conoscere zona di drop
+    el.parent().addClass('drop-zone');
+  }
+
+  function initDragEnd(el) {
+    el.removeClass('dragging');
+    el.parent().removeClass('drop-zone');
+  }
+
+  function initDragOver(event, el) {
+    //Calcolo posizione elemento
+    currentOverEl = el;
+    const draggingPos = event.pageX;
+    const elPos = el.offset().left;
+    const elCenterWidth = el.width() / 2;
+
+    //Se l'elemento draggato viene portato dopo la metà dell'elemento sottostante
+    if(draggingPos > (elPos + elCenterWidth)) {
+      elPosEnd = 'after';
+    } else {
+      elPosEnd = 'before';
+    }
+  }
+
+  function initDrop(el) {
+    //Prendo elementi
+    const wrapEl = el.parent();
+
+    //Se non è zona di drop giusta termino operazione
+    if(!wrapEl.hasClass('drop-zone')) return;
+
+    //Prendo elemento input
+    const hiddenInput = wrapEl.parent().parent().find('.projects-images-hidden-input');
+    //Recupero elemento dragging 
+    const dragEl = $('.dragging');
+
+    //inizializzo array
+    const newOrderArr = [];
+
+    //Posiziono elemento in base a posizione
+    if(elPosEnd === 'after') {
+      currentOverEl.after(dragEl);
+    } else {
+      currentOverEl.before(dragEl);
+    }
+
+    //Salvo in array valori con nuovo ordine
+    wrapEl.children().each(function() {
+      newOrderArr.push($(this).attr('data-id'));
+    });
+    
+    //Inserisco valori in input
+    hiddenInput.val(newOrderArr.join(','));
   }
 }); 

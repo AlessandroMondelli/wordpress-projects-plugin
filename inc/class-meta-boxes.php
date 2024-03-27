@@ -96,42 +96,44 @@ class AmProjectMetaBoxes
         $complessita = get_post_meta($post->ID, "projects-details-complessita", true);
         $innovazione = get_post_meta($post->ID, "projects-details-innovazione", true);
 ?>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+    <div class="projects-details-box-wrapper" style="display: flex; flex-direction: column;">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-committente" style="font-weight:bold">Committente</label>
-            <input name="projects-details-committente" id="projects-details-committente" type="text" style="margin-top: 10px" value="<?php echo $committente ?>">
+            <input name="projects-details-committente" id="projects-details-committente" type="text" style="display: block; margin-top: 10px;" value="<?php echo $committente ?>">
         </div>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-cliente" style="font-weight:bold">Cliente</label>
-            <input name="projects-details-cliente" id="projects-details-cliente" type="text" style="margin-top: 10px" value="<?php echo $cliente ?>">
+            <input name="projects-details-cliente" id="projects-details-cliente" type="text" style="display: block; margin-top: 10px" value="<?php echo $cliente ?>">
         </div>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-importo-lavori" style="font-weight:bold">Importo lavori</label>
-            <input name="projects-details-importo-lavori" id="projects-details-importo-lavori" type="text" style="margin-top: 10px" value="<?php echo $importo_lavori ?>">
+            <input name="projects-details-importo-lavori" id="projects-details-importo-lavori" type="text" style="display: block; margin-top: 10px" value="<?php echo $importo_lavori ?>">
         </div>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-anno" style="font-weight:bold">Anno</label>
-            <input name="projects-details-anno" id="projects-details-anno" type="number" style="margin-top: 10px" value="<?php echo $anno ?>">
+            <input name="projects-details-anno" id="projects-details-anno" type="number" style="display: block; margin-top: 10px" value="<?php echo $anno ?>">
         </div>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-luogo" style="font-weight:bold">Luogo</label>
-            <input name="projects-details-luogo" id="projects-details-luogo" type="text" style="margin-top: 10px" value="<?php echo $luogo ?>">
+            <input name="projects-details-luogo" id="projects-details-luogo" type="text" style="display: block; margin-top: 10px" value="<?php echo $luogo ?>">
         </div>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-fase" style="font-weight:bold">Fase</label>
-            <input name="projects-details-fase" id="projects-details-fase" type="text" style="margin-top: 10px" value="<?php echo $fase ?>">
+            <input name="projects-details-fase" id="projects-details-fase" type="text" style="display: block; margin-top: 10px" value="<?php echo $fase ?>">
         </div>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-discipline" style="font-weight:bold">Discipline</label>
-            <input name="projects-details-discipline" id="projects-details-discipline" type="text" style="margin-top: 10px" value="<?php echo $discipline ?>">
+            <input name="projects-details-discipline" id="projects-details-discipline" type="text" style="display: block; margin-top: 10px" value="<?php echo $discipline ?>">
         </div>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-complessita" style="font-weight:bold">Complessità (%)</label>
-            <input name="projects-details-complessita" id="projects-details-complessita" type="number" min="0" max="100" style="margin-top: 10px" value="<?php echo $complessita ?>">
+            <input name="projects-details-complessita" id="projects-details-complessita" type="number" min="0" max="100" style="display: block; margin-top: 10px" value="<?php echo $complessita ?>">
         </div>
-        <div id="projects-details-box" style="display: grid; grid-template-columns: [label] 1fr [input] 1fr [space] 5fr; margin-bottom: 10px; align-items: center">
+        <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-innovazione" style="font-weight:bold">Innovazione (%)</label>
-            <input name="projects-details-innovazione" id="projects-details-innovazione" type="number" min="0" max="100" style="margin-top: 10px" value="<?php echo $innovazione ?>">
+            <input name="projects-details-innovazione" id="projects-details-innovazione" type="number" min="0" max="100" style="display: block; margin-top: 10px" value="<?php echo $innovazione ?>">
         </div>
+    </div>
     <?php
     }
 
