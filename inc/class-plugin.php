@@ -15,7 +15,7 @@ class AmProject {
         add_action( 'wp_enqueue_scripts',[ $this, 'am_register_scripts' ] ); //Enqueue script
         add_action( 'init',[ $this, 'am_register_style'] ); //Enqueue style
         add_filter('single_template',[ $this, 'am_projects_single_template'] ); //Attivo template
-        add_action('admin_enqueue_scripts', [ $this, 'am_enqueue_media_uploader_scripts'] ); //Enqueue script per gallery picker
+        add_action('admin_enqueue_scripts', [ $this, 'am_enqueue_images_handler_scripts'] ); //Enqueue script per gallery picker
 
 
         new AmProjectPostTypeAndTaxonomies();
@@ -58,14 +58,14 @@ class AmProject {
     }
 
     //Aggiungo supporto script per upload galleria
-    function am_enqueue_media_uploader_scripts() {
+    function am_enqueue_images_handler_scripts() {
         global $typenow;
         
         if ($typenow == 'am_projects') {
             wp_enqueue_media();
             
             // Enqueue your custom script that opens the media uploader
-            wp_enqueue_script('your_custom_media_script', PLUGIN_URL . 'js/custom-media-uploader.js', array('jquery'), null, true);
+            wp_enqueue_script('amprojects_images_handler_script', PLUGIN_URL . 'js/imagesHandler.js', array('jquery'), null, true);
         }
     }
 }

@@ -157,7 +157,7 @@ class AmProjectMetaBoxes
                 //Stampa preview icone con tooltip
                 foreach ($media_ids_array as $media_id) {
                 ?>
-                    <div class="gallery-el img-preview-el" data-id="<?php echo $media_id ?>" style="position:relative">
+                    <div class="gallery-el img-preview-el draggable" data-id="<?php echo $media_id ?>" style="position:relative">
                         <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>
                         <img src="<?php echo wp_get_attachment_url($media_id) ?>" style="max-width: 250px;" />
                     </div>
@@ -191,7 +191,7 @@ class AmProjectMetaBoxes
                 //Stampa preview icone con tooltip
                 foreach ($icons_ids_array as $icon_id) {
                 ?>
-                    <div class="am-icons-tooltip-preview-el img-preview-el" data-id="<?php echo $icon_id ?>" style="position:relative">
+                    <div class="am-icons-tooltip-preview-el img-preview-el draggable" data-id="<?php echo $icon_id ?>" style="position:relative">
                         <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>
                         <img src="<?php echo wp_get_attachment_url($icon_id) ?>" style="max-width: 250px; <?php echo in_array($icon_id, $icons_ids_active_array) ? "filter:contrast(1);" : "filter:contrast(0);" ?> cursor: pointer" />
                     </div>
