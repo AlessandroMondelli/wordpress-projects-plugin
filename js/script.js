@@ -195,23 +195,4 @@ jQuery(function ($) {
       }
     });
   });
-
-  //Slider background check
-  BackgroundCheck.init({
-    targets: '.am-projects-gallery-swiper-icon i',
-    images: '.am-projects-gallery-el img',
-    changeParent: true,
-    minComplexity: 20,
-  });
-
-  const sliderWrapper = $('.am-projects-gallery-swiper-wrapper')[0];
-
-  const observer = new MutationObserver((mutationList) => {
-    mutationList.forEach(() => {
-      BackgroundCheck.refresh();
-    });
-  });
-
-  // Configure the MutationObserver to observe attribute changes
-  observer.observe(sliderWrapper, { attributes: true, attributeFilter: ['style'] });
 });

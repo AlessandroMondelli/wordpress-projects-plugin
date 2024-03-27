@@ -54,6 +54,31 @@ jQuery(function ($) {
     moveSlides();
   });
 
+  //Controlli touch
+  let firstTouch = 0;
+  let currentTouch = 0;
+  $(".am-projects-gallery").on("touchmove", function(e) {
+    const touch = e.touches[0];
+
+    if(currentTouch === 0) {
+      firstTouch = touch.pageX;
+    }
+
+    currentTouch = touch.pageX;
+  });
+
+  $(".am-projects-gallery").on("touchend", function(e) {
+    if(currentTouch > firstTouch) {
+      swipeBack();
+      moveSlides();
+    } else {
+      swipeForward();
+      moveSlides();
+    }
+
+    currentTouch = 0;
+  });
+
   //Auto slide
   activateAutoMoving();
   
@@ -112,4 +137,23 @@ jQuery(function ($) {
     $(".am-projects-gallery-el.active").removeClass("active");
     $(".am-projects-gallery-el:nth-child(" + (currentSlide + 1) + ")").addClass("active");
   }
+
+  //Slider background check
+  BackgroundCheck.init({
+    targets: '.am-projects-gallery-swiper-icon i',
+    images: '.am-projects-gallery-el img',
+    changeParent: true,
+    minComplexity: 20,
+  });
+
+  const sliderWrapper = $('.am-projects-gallery-swiper-wrapper')[0];
+
+  const observer = new MutationObserver((mutationList) => {
+    mutationList.forEach(() => {
+      BackgroundCheck.refresh();
+    });
+  });
+  
+  // Configure the MutationObserver to observe attribute changes
+  observer.observe(sliderWrapper, { attributes: true, attributeFilter: ['style'] });
 });
