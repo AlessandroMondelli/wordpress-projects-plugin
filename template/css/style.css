@@ -124,6 +124,21 @@
   right: 0%;
 }
 
+/* Background Plugin */
+.am-projects-gallery-swiper-icon i {
+  transition: all 0.5s ease;
+}
+
+.background--dark i {
+  color: #fff;
+  -webkit-text-stroke: 1px #000000;
+}
+
+.background--light i {
+  color: #000;
+  -webkit-text-stroke: 1px #fff;
+}
+
 /* Media Queries */
 @media screen and (min-width: 768px) {
   .am-projects-thumbnail-wrap img {

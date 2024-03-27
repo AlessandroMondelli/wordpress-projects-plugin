@@ -14,9 +14,8 @@ class AmProject {
     function __construct() {
         add_action( 'wp_enqueue_scripts',[ $this, 'am_register_scripts' ] ); //Enqueue script
         add_action( 'init',[ $this, 'am_register_style'] ); //Enqueue style
-        add_filter('single_template',[ $this, 'am_projects_single_template'] ); //Attivo template
         add_action('admin_enqueue_scripts', [ $this, 'am_enqueue_images_handler_scripts'] ); //Enqueue script per gallery picker
-
+        add_filter('single_template',[ $this, 'am_projects_single_template'] ); //Attivo template
 
         new AmProjectPostTypeAndTaxonomies();
         new AmProjectFunctions();
@@ -27,6 +26,7 @@ class AmProject {
 
     //Registro jQuery
     public function am_register_scripts() {
+        wp_enqueue_script( 'amprojects_background_plugin', PLUGIN_URL . 'js/backgroundCheckPlugin.js' );
         wp_enqueue_script( 'amprojects_jquery', PLUGIN_URL . 'js/script.js', ['jquery'] );
         wp_enqueue_script( 'amprojects_template_jquery', PLUGIN_URL . 'template/js/script.js', ['jquery'] );
     }
@@ -46,17 +46,6 @@ class AmProject {
         wp_enqueue_style( 'amprojects_template_style' );
     }
 
-    //Aggiungo template
-    public function am_projects_single_template($am_project_template) {
-        global $post;
-
-        if($post->post_type == 'am_projects') {
-            $am_project_template = PLUGIN_DIR . 'template/single-am_projects.php';          
-        }
-
-        return $am_project_template;
-    }
-
     //Aggiungo supporto script per upload galleria
     function am_enqueue_images_handler_scripts() {
         global $typenow;
@@ -67,5 +56,16 @@ class AmProject {
             // Enqueue your custom script that opens the media uploader
             wp_enqueue_script('amprojects_images_handler_script', PLUGIN_URL . 'js/imagesHandler.js', array('jquery'), null, true);
         }
+    }
+
+    //Aggiungo template
+    public function am_projects_single_template($am_project_template) {
+        global $post;
+
+        if($post->post_type == 'am_projects') {
+            $am_project_template = PLUGIN_DIR . 'template/single-am_projects.php';          
+        }
+
+        return $am_project_template;
     }
 }

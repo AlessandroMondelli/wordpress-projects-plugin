@@ -110,8 +110,12 @@ while(have_posts()) : the_post();
                 }
               ?>
             </div>
-            <div class="am-projects-gallery-swiper-icon swipe-back"><i aria-hidden="true" class="eicon-chevron-left"></i></div>
-            <div class="am-projects-gallery-swiper-icon swipe-forward"><i aria-hidden="true" class="eicon-chevron-right"></i></div>
+            <div class="am-projects-gallery-swiper-icon swipe-back">
+              <i aria-hidden="true" class="eicon-chevron-left"></i>
+            </div>
+            <div class="am-projects-gallery-swiper-icon swipe-forward">
+              <i aria-hidden="true" class="eicon-chevron-right"></i>
+            </div>
           </div>
         </div>
       </article>
