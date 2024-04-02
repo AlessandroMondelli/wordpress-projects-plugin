@@ -111,10 +111,15 @@ while(have_posts()) : the_post();
               ?>
             </div>
             <div class="am-projects-gallery-swiper-icon swipe-back">
-              <i aria-hidden="true" class="eicon-chevron-left"></i>
+              <?php 
+                include_once PLUGIN_DIR. "template/media/chevron-left.svg";
+              ?>
             </div>
             <div class="am-projects-gallery-swiper-icon swipe-forward">
-              <i aria-hidden="true" class="eicon-chevron-right"></i>
+              <i class="fa-solid fa-chevron-left" aria-hidden="true" ></i>
+              <?php 
+                include_once PLUGIN_DIR. "template/media/chevron-right.svg";
+              ?>
             </div>
           </div>
         </div>

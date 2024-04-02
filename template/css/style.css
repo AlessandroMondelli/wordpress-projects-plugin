@@ -32,6 +32,10 @@
   text-align: center;
 }
 
+.am-projects-details-list-el-title {
+  word-break: initial;
+}
+
 .am-projects-details-list-el-progress-bar-wrap, .am-projects-details-list-el-progress-bar-active  {
   height: 8px;
   border-radius: 4px;
@@ -115,7 +119,11 @@
   position: absolute;
   top: 50%;
   cursor: pointer;
-  font-size: 2rem;
+}
+
+.am-projects-gallery-swiper-icon svg {
+  width: 3rem;
+  height: 100px;
 }
 
 .am-projects-gallery-swiper-icon.swipe-back {
@@ -126,18 +134,16 @@
 }
 
 /* Background Plugin */
-.am-projects-gallery-swiper-icon i {
+.am-projects-gallery-swiper-icon svg path {
   transition: all 0.5s ease;
 }
 
-.background--dark i {
-  color: #fff;
-  -webkit-text-stroke: 1px #000000;
+.background--dark svg path {
+  stroke: #fff;
 }
 
-.background--light i {
-  color: #000;
-  -webkit-text-stroke: 1px #fff;
+.background--light svg path {
+  stroke: #000;
 }
 
 /* Media Queries */
@@ -182,7 +188,7 @@
   .am-projects-info-wrap {
     display: grid;
     grid-template-columns: 2fr 2fr;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .am-projects-icons-tooltip-wrap {

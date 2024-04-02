@@ -140,10 +140,10 @@ jQuery(function ($) {
 
   //Slider background check
   BackgroundCheck.init({
-    targets: '.am-projects-gallery-swiper-icon i',
+    targets: '.am-projects-gallery-swiper-icon svg',
     images: '.am-projects-gallery-el img',
     changeParent: true,
-    minComplexity: 20,
+    minComplexity: 30,
   });
 
   const sliderWrapper = $('.am-projects-gallery-swiper-wrapper')[0];
