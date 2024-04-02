@@ -106,7 +106,6 @@
 }
 
 .am-projects-gallery-el img {
-  max-width: fit-content;
   object-fit: cover;
   height: 100%;
   width: 100%;
@@ -153,11 +152,6 @@
     margin: 0 auto;
   }
 
-  .am-projects-info-wrap {
-    display: grid;
-    grid-template-columns: 2fr 2fr;
-  }
-
   .am-projects-data h3 {
     text-align: left;
   }
@@ -177,15 +171,21 @@
     width: 100%;
     margin: 0;
   }
-
-  .am-projects-icons-tooltip-wrap {
-    justify-content: start;
-  }
 }
 
 @media screen and (min-width: 1024px) {
   .am-projects-content-wrap {
     width: 75%;
     margin: 0 auto;
+  }
+
+  .am-projects-info-wrap {
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 2rem;
+  }
+
+  .am-projects-icons-tooltip-wrap {
+    justify-content: start;
   }
 }
