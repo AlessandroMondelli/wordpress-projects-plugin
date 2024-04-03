@@ -2,25 +2,30 @@
 
 /*
 Template Name: Am Projects Template
-Template Post Type: page, am_projects
+Template Post Type: am_projects
 */
 
 get_header();
 
 //Inizia loop
 while(have_posts()) : the_post();
+  //Recupero immagine secondaria
+  $secondary_image = get_post_meta($post->ID, 'am-project-secondary-image', true);
+
+  //Recupero sottotitolo
+  $subtitle = get_post_meta($post->ID, 'am-project-subtitle', true);
 
   //Recupero dati da db
   $project_details = [
-    'Committente' => get_post_meta($post->ID, "projects-details-committente", true), 
-    'Cliente' => get_post_meta($post->ID, "projects-details-cliente", true), 
-    'Importo lavori' => get_post_meta($post->ID, "projects-details-importo-lavori", true),
-    'Anno' => get_post_meta($post->ID, "projects-details-anno", true),
-    'Luogo' => get_post_meta($post->ID, "projects-details-luogo", true),
-    'Fase' => get_post_meta($post->ID, "projects-details-fase", true),
-    'Discipline' => get_post_meta($post->ID, "projects-details-discipline", true),
-    'Complessità' => get_post_meta($post->ID, "projects-details-complessita", true),
-    'Innovazione' => get_post_meta($post->ID, "projects-details-innovazione", true)
+    'Committente' => get_post_meta($post->ID, 'projects-details-committente', true), 
+    'Cliente' => get_post_meta($post->ID, 'projects-details-cliente', true), 
+    'Importo lavori' => get_post_meta($post->ID, 'projects-details-importo-lavori', true),
+    'Anno' => get_post_meta($post->ID, 'projects-details-anno', true),
+    'Luogo' => get_post_meta($post->ID, 'projects-details-luogo', true),
+    'Fase' => get_post_meta($post->ID, 'projects-details-fase', true),
+    'Discipline' => get_post_meta($post->ID, 'projects-details-discipline', true),
+    'Complessità' => get_post_meta($post->ID, 'projects-details-complessita', true),
+    'Innovazione' => get_post_meta($post->ID, 'projects-details-innovazione', true)
   ];
 
   //Recupero immagini galleria
@@ -38,10 +43,13 @@ while(have_posts()) : the_post();
   ?>
     <section class="am-projects-container">
       <div class="am-projects-thumbnail-wrap">
-        <?php echo get_the_post_thumbnail(); ?>
+        <?php echo $secondary_image != "" ? wp_get_attachment_image($secondary_image, 'full') : get_the_post_thumbnail(); ?>
       </div>
       <article class="am-projects-content-wrap">
-        <h2 class="am-projects-content-title"><?php the_title() ?></h2>
+        <div class="am-projects-content-title-wrap">
+          <h2 class="am-projects-content-title"><?php the_title() ?></h2>
+          <p class="am-projects-content-subtitle"><?php echo $subtitle ?></p>
+        </div>
         <div class="am-projects-content">
           <?php the_content(); ?>
         </div>

@@ -3,6 +3,15 @@ jQuery(document).ready(function($) {
   let currentOverEl;
   let elPosEnd;
 
+  $('#am_project_secondary_image').click(function(e) {
+    e.preventDefault();
+
+    const hiddenInputSecondaryImage = $('#am-project-secondary-image');
+    const imageWrapper = $('.am-secondary-image-preview');
+
+    openCustomUploader('immagine', 'immagini', false, 'image', hiddenInputSecondaryImage, imageWrapper, false);
+  });
+
   $('#am_gallery_button').click(function(e) {
       e.preventDefault();
 
@@ -76,19 +85,19 @@ jQuery(document).ready(function($) {
     })
     .on('select', function() {
       const selection = custom_uploader.state().get('selection');
-      const media_ids = hiddenInputEl.val().length !== 0 ? hiddenInputEl.val().split(',').map(Number) : [];
+      const media_ids = isMultiple && hiddenInputEl.val().length !== 0 ? hiddenInputEl.val().split(',').map(Number) : [];
 
       selection.each(function(attachment) {
+        if(!isMultiple) mediaContainer.empty();
         if(!media_ids.includes(attachment.id)) {
           //Creo wrapper html in base a supporto tooltip
-          const wrapperHTML = tooltipSupport ? '<div class="am-icons-tooltip-preview-el img-preview-el draggable" data-id="' + attachment.id + '" style="position:relative"> ' : '<div class="gallery-el img-preview-el draggable" data-id="' + attachment.id + '" style="position:relative"> ';
+          let wrapperHTML = tooltipSupport ? '<div class="am-icons-tooltip-preview-el img-preview-el draggable" data-id="' + attachment.id + '" style="position:relative"> ' : '<div class="gallery-el img-preview-el draggable" data-id="' + attachment.id + '" style="position:relative"> ';
 
-          mediaContainer.append(
-            wrapperHTML +
-            '<p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>' +
-            '<img src="' + attachment.attributes.url  + '" style="max-width: 250px;" />' +
-            '</div>'
-          );
+          wrapperHTML +=  '<p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>';
+
+          wrapperHTML += '<img src="' + attachment.attributes.url  + '" style="max-width: 250px;" />' + '</div>'
+
+          mediaContainer.append(wrapperHTML);
 
           media_ids.push(attachment.id);
         }

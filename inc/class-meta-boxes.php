@@ -14,9 +14,11 @@ class AmProjectMetaBoxes
     protected function set_hooks()
     {
         add_action('add_meta_boxes', [$this, 'am_projects_add_metaboxes']);
-
+        
+        add_action('save_post_am_projects', [$this, 'am_save_project_subtitle'], 10, 3);
         add_action('save_post_am_projects', [$this, 'am_save_no_link_proj_box'], 10, 3);
         add_action('save_post_am_projects', [$this, 'am_save_projects_details'], 10, 3);
+        add_action('save_post_am_projects', [$this, 'am_save_secondary_image'], 10, 3);
         add_action('save_post_am_projects', [$this, 'am_save_projects_gallery'], 10, 3);
         add_action('save_post_am_projects', [$this, 'am_save_icons_tooltip'], 10, 3);
     }
@@ -24,10 +26,28 @@ class AmProjectMetaBoxes
     //Creo nuovo metabox
     public function am_projects_add_metaboxes()
     {
+        add_meta_box('am-project-seceondary-image', 'Immagine Secondaria', [$this, 'am_secondary_image']);
+        add_meta_box('am-project-subtitle-box', 'Sottotitolo', [$this, 'am_project_subtitle_markup']);
         add_meta_box('no-link-proj-box', 'Nascondi link progetto', [$this, 'am_no_link_proj_box_markup'], 'am_projects');
         add_meta_box('projects-details', 'Dettagli Progetto', [$this, 'am_projects_details'], 'am_projects');
         add_meta_box('projects-gallery', 'Galleria Progetto', [$this, 'am_gallery_markup'], 'am_projects');
         add_meta_box('projects-icons-tooltip', 'Icone con tooltip', [$this, 'am_icons_tooltip'], 'am_projects');
+    }
+
+    //Markup metabox no link
+    public function am_project_subtitle_markup($post)
+    {
+        //Creo nonce
+        wp_nonce_field('am_project_subtitle_action', 'am_project_subtitle_nonce');
+
+        //Prendo valore salvato nel database
+        $subtitle = get_post_meta($post->ID, 'am-project-subtitle', true);
+    ?>
+        <div id="am-project-subtitle">
+            <label for="am-project-subtitle">Sottotitolo progetto</label>
+            <input name="am-project-subtitle" type="text" id="am-project-subtitle" value="<?php echo $subtitle ?>" style="display:block; margin-top:10px">
+        </div>
+    <?php
     }
 
     //Markup metabox no link
@@ -58,30 +78,31 @@ class AmProjectMetaBoxes
         ?>
             <div class="proj-extra-data-wrap" style="margin: 10px 0">
                 <label for="proj-info-1" style="font-weight:bold;">Inserisci prima riga info</label>
-                <input name="proj-info-1" type="text" id="proj-info-1" value="<?php echo $proj_info_1 != '' ? $proj_info_1 : '' ?>">
+                <input name="proj-info-1" type="text" id="proj-info-1" value="<?php echo $proj_info_1 != '' ? $proj_info_1 : '' ?>" style="display:block; margin-top:10px">
             </div>
             <div class="proj-extra-data-wrap" style="margin: 10px 0">
                 <label for="proj-info-2" style="font-weight:bold;">Inserisci seconda riga info</label>
-                <input name="proj-info-2" type="text" id="proj-info-2" value="<?php echo $proj_info_2 != '' ? $proj_info_2 : '' ?>">
+                <input name="proj-info-2" type="text" id="proj-info-2" value="<?php echo $proj_info_2 != '' ? $proj_info_2 : '' ?>" style="display:block; margin-top:10px">
             </div>
             <div class="proj-extra-data-wrap" style="margin: 10px 0">
                 <label for="proj-year" style="font-weight:bold;">Inserisci anno</label>
-                <input name="proj-year" type="text" id="proj-year" value="<?php echo $proj_year != '' ? $proj_year : '' ?>">
+                <input name="proj-year" type="text" id="proj-year" value="<?php echo $proj_year != '' ? $proj_year : '' ?>" style="display:block; margin-top:10px">
             </div>
             <div class="proj-extra-data-wrap" style="margin: 20px 0">
                 <label for="proj-spotlight-switch" style="font-weight:bold;">Lightbox con click</label>
-                <select name="proj-spotlight-switch" id="proj-spotlight-switch" style="margin-top: 20px">
+                <select name="proj-spotlight-switch" id="proj-spotlight-switch" style="display:block; margin-top:10px">
                     <option value="true" <?php selected($proj_spotlight, 'true'); ?>>Attivo</option>
                     <option value="false" <?php selected($proj_spotlight, 'false'); ?>>Disattivato</option>
                 </select>
             </div>
 
-<?php
+    <?php
         }
     }
 
     //Markup metabox dettagli progetto
-    public function am_projects_details($post) {
+    public function am_projects_details($post) 
+    {
         //Creo nonce
         wp_nonce_field('am_projects_details_metabox_action', 'am_projects_details_metabox_nonce');
 
@@ -95,7 +116,7 @@ class AmProjectMetaBoxes
         $discipline = get_post_meta($post->ID, "projects-details-discipline", true);
         $complessita = get_post_meta($post->ID, "projects-details-complessita", true);
         $innovazione = get_post_meta($post->ID, "projects-details-innovazione", true);
-?>
+    ?>
     <div class="projects-details-box-wrapper" style="display: flex; flex-direction: column;">
         <div id="projects-details-box" style="margin-top: 10px;">
             <label for="projects-details-committente" style="font-weight:bold">Committente</label>
@@ -137,7 +158,38 @@ class AmProjectMetaBoxes
     <?php
     }
 
-    public function am_gallery_markup($post) {
+    public function am_secondary_image($post) 
+    {
+        //Creo nonce
+        wp_nonce_field('am_projects_secondary_image_action', 'am_projects_secondary_image_nonce');
+        
+        //Recupero immagine da db
+        $secondary_image = get_post_meta($post->ID, 'am-project-secondary-image', true);    
+        ?>
+        <a href="#" id="am_project_secondary_image" class="button" style="margin-top:25px">Seleziona Immagine</a>
+
+        <div class="am-secondary-image-current am-images-container">
+            <p style="margin-top:25px; font-weight:bold;">Immagine secondaria</p>
+            <div class="am-secondary-image-preview" style="margin-top: 15px; max-width: 250px;">
+            <?php
+                if($secondary_image != "") {
+            ?>
+                    <div class="am-secondary-image img-preview-el" data-id="<?php echo $secondary_image ?>" style="position:relative">
+                    <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>
+                    <img src="<?php echo wp_get_attachment_url($secondary_image) ?>" style="max-width: 250px;" />
+                </div>
+            <?php
+                }
+            ?>
+            </div>
+        </div>
+        
+        <input type="hidden" name="am-project-secondary-image" id="am-project-secondary-image" class="projects-images-hidden-input" value="<?php echo esc_attr($secondary_image)?>" />
+        <?php
+    }
+
+    public function am_gallery_markup($post) 
+    {
         //Creo nonce
         wp_nonce_field('am_projects_gallery_metabox_action', 'am_projects_gallery_metabox_nonce');
         
@@ -173,7 +225,8 @@ class AmProjectMetaBoxes
         <?php
     }
 
-    public function am_icons_tooltip($post) {
+    public function am_icons_tooltip($post) 
+    {
         //Creo nonce
         wp_nonce_field('am_projects_icons_tooltip_metabox_action', 'am_projects_gallery_metabox_nonce');
 
@@ -209,7 +262,42 @@ class AmProjectMetaBoxes
     }
 
     //Metodo per salvare nel database i dati presi dal metabox
-    public function am_save_no_link_proj_box($post_id, $post, $update) {
+    public function am_save_project_subtitle($post_id, $post, $update) 
+    {
+        //Controllo prima di inviare i dati...
+        //Se l'utente è abilitato a modificare i post
+        if (!current_user_can('edit_post', $post_id))
+
+            //Se il salvataggio non sia un autosalvataggio di WP
+            if (defined("DOING_AUTOSAVE") && DOING_AUTOSAVE)
+                return $post_id;
+
+        //Se il custom post type è esatto
+        $cpt_check = "am_projects";
+        if ($cpt_check != $post->post_type)
+            return $post_id;
+
+        if (is_null($_POST['am_project_subtitle_nonce']))
+            return $post_id;
+
+        //Controllo Nonce
+        if ($update && !wp_verify_nonce($_POST['am_project_subtitle_nonce'], 'am_project_subtitle_action')) {
+            echo 'Errore, Nonce non verificato';
+            exit;
+        }
+
+        //Procedo al salvataggio dei dati
+        $subtitle_value = '';
+        if (isset($_POST['am-project-subtitle'])) {
+            $subtitle_value = sanitize_text_field($_POST['am-project-subtitle']);
+
+            update_post_meta($post->ID, 'am-project-subtitle', $subtitle_value);
+        }
+    }
+
+    //Metodo per salvare nel database i dati presi dal metabox
+    public function am_save_no_link_proj_box($post_id, $post, $update) 
+    {
         //Controllo prima di inviare i dati...
         //Se l'utente è abilitato a modificare i post
         if (!current_user_can('edit_post', $post_id))
@@ -271,7 +359,9 @@ class AmProjectMetaBoxes
         }
     }
 
-    public function am_save_projects_details($post_id, $post, $update) {
+    //Metodo per salvare nel database i dettagli del progetto
+    public function am_save_projects_details($post_id, $post, $update) 
+    {
         //Controllo prima di inviare i dati...
         //Se l'utente è abilitato a modificare i post
         if (!current_user_can('edit_post', $post_id))
@@ -283,13 +373,13 @@ class AmProjectMetaBoxes
         //Se il custom post type è esatto
         $cpt_check = "am_projects";
         if ($cpt_check != $post->post_type)
-            return $post_id;
+            return $post_id;             
 
         if (is_null($_POST['am_no_link_metabox_nonce']))
             return $post_id;
 
         //Controllo Nonce
-        if ($update && !wp_verify_nonce($_POST['am_no_link_metabox_nonce'], 'am_no_link_metabox_action')) {
+        if ($update && !wp_verify_nonce($_POST['am_projects_details_metabox_nonce'], 'am_projects_details_metabox_action')) {
             echo 'Errore, Nonce non verificato';
             exit;
         }
@@ -359,7 +449,17 @@ class AmProjectMetaBoxes
     }
 
     //Salvataggio scelta galleria immagini
-    function am_save_projects_gallery($post_id) {    
+    function am_save_secondary_image($post_id) 
+    {    
+        if (isset($_POST['am-project-secondary-image'])) {
+            $secondary_image = sanitize_text_field($_POST['am-project-secondary-image']); 
+            update_post_meta($post_id, 'am-project-secondary-image', $secondary_image);
+        }
+    }
+
+    //Salvataggio scelta galleria immagini
+    function am_save_projects_gallery($post_id) 
+    {    
         if (isset($_POST['projects-gallery-images'])) {
             $media_ids = sanitize_text_field($_POST['projects-gallery-images']); 
             update_post_meta($post_id, 'projects-gallery-images', $media_ids);
@@ -372,7 +472,8 @@ class AmProjectMetaBoxes
     }
 
     //Salvataggio icone con tooltip
-    function am_save_icons_tooltip($post_id) {    
+    function am_save_icons_tooltip($post_id) 
+    {    
         if (isset($_POST['projects-icons-tooltip-input'])) {
             $tooltips_ids = sanitize_text_field($_POST['projects-icons-tooltip-input']); 
             update_post_meta($post_id, 'projects-icons-tooltip-input', $tooltips_ids);
