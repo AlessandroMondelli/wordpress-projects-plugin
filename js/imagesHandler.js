@@ -88,12 +88,14 @@ jQuery(document).ready(function($) {
       const media_ids = isMultiple && hiddenInputEl.val().length !== 0 ? hiddenInputEl.val().split(',').map(Number) : [];
 
       selection.each(function(attachment) {
+        const mediaFolderUrl = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + "/wp-content/plugins/wordpress-projects-plugin/template/media/";
+
         if(!isMultiple) mediaContainer.empty();
         if(!media_ids.includes(attachment.id)) {
           //Creo wrapper html in base a supporto tooltip
           let wrapperHTML = tooltipSupport ? '<div class="am-icons-tooltip-preview-el img-preview-el draggable" data-id="' + attachment.id + '" style="position:relative"> ' : '<div class="gallery-el img-preview-el draggable" data-id="' + attachment.id + '" style="position:relative"> ';
 
-          wrapperHTML +=  '<p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>';
+          wrapperHTML +=  '<img class="remove-el" style="position:absolute; width: 35px; top: -1.5rem; right: -2rem; z-index: 99; cursor: pointer" src="' + mediaFolderUrl + 'remove-icon.svg">';
 
           wrapperHTML += '<img src="' + attachment.attributes.url  + '" style="max-width: 250px;" />' + '</div>'
 

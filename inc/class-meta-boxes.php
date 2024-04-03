@@ -175,7 +175,7 @@ class AmProjectMetaBoxes
                 if($secondary_image != "") {
             ?>
                     <div class="am-secondary-image img-preview-el" data-id="<?php echo $secondary_image ?>" style="position:relative">
-                    <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>
+                    <img class="remove-el" style="position:absolute; width: 35px; top: -1.5rem; right: -2rem; z-index: 99; cursor: pointer" src="<?php echo PLUGIN_URL . 'template/media/remove-icon.svg' ?>">
                     <img src="<?php echo wp_get_attachment_url($secondary_image) ?>" style="max-width: 250px;" />
                 </div>
             <?php
@@ -212,7 +212,7 @@ class AmProjectMetaBoxes
                 foreach ($media_ids_array as $media_id) {
                 ?>
                     <div class="gallery-el img-preview-el draggable" data-id="<?php echo $media_id ?>" style="position:relative">
-                        <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>
+                        <img class="remove-el" style="position:absolute; width: 35px; top: -1.5rem; right: -2rem; z-index: 99; cursor: pointer" src="<?php echo PLUGIN_URL . 'template/media/remove-icon.svg' ?>">
                         <img src="<?php echo wp_get_attachment_url($media_id) ?>" style="max-width: 250px;" />
                     </div>
                 <?php
@@ -247,7 +247,7 @@ class AmProjectMetaBoxes
                 foreach ($icons_ids_array as $icon_id) {
                 ?>
                     <div class="am-icons-tooltip-preview-el img-preview-el draggable" data-id="<?php echo $icon_id ?>" style="position:relative">
-                        <p class="remove-el" style="position:absolute; top: -1.5rem; right: -1rem; border: 1px solid black; padding: 1px 5px; border-radius: 50%; background-color: white; z-index: 99; cursor: pointer">X</p>
+                        <img class="remove-el" style="position:absolute; width: 35px; top: -1.5rem; right: -2rem; z-index: 99; cursor: pointer" src="<?php echo PLUGIN_URL . 'template/media/remove-icon.svg' ?>">
                         <img src="<?php echo wp_get_attachment_url($icon_id) ?>" style="max-width: 250px; <?php echo in_array($icon_id, $icons_ids_active_array) ? "filter:contrast(1);" : "filter:contrast(0);" ?> cursor: pointer" />
                     </div>
                 <?php
