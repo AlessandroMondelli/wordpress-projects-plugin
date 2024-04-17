@@ -81,6 +81,14 @@ jQuery(function ($) {
 
   //Auto slide
   activateAutoMoving();
+
+  $(document).on("visibilitychange", (e) => {
+    if (document.visibilityState == "visible") {
+      activateAutoMoving();
+    } else {
+      clearInterval(autoMovingIntervalTimeId);
+    }
+  });
   
   $(".am-projects-gallery").on("mouseenter", function() {
     clearInterval(autoMovingIntervalTimeId);

@@ -16,7 +16,6 @@ if( !defined( 'ABSPATH' ) ) {
     settings_fields( 'layout_group' );
     do_settings_sections( 'layout_progetti' );
     
+    submit_button()
     ?>
-
-    <?php submit_button() ?>
 </form>
