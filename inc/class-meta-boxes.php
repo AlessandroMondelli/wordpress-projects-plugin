@@ -26,39 +26,37 @@ class AmProjectMetaBoxes
     //Creo nuovo metabox
     public function am_projects_add_metaboxes()
     {
-        add_meta_box('am-project-seceondary-image', 'Immagine Secondaria', [$this, 'am_secondary_image']);
         add_meta_box('am-project-subtitle-box', 'Sottotitolo', [$this, 'am_project_subtitle_markup']);
+        add_meta_box('am-project-secondary-image', 'Immagine Secondaria', [$this, 'am_secondary_image']);
         add_meta_box('no-link-proj-box', 'Nascondi link progetto', [$this, 'am_no_link_proj_box_markup'], 'am_projects');
         add_meta_box('projects-details', 'Dettagli Progetto', [$this, 'am_projects_details'], 'am_projects');
-        add_meta_box('projects-gallery', 'Galleria Progetto', [$this, 'am_gallery_markup'], 'am_projects');
+        add_meta_box('projects-gallery', 'Galleria Progetto', [$this, 'am_projects_gallery_markup'], 'am_projects');
         add_meta_box('projects-icons-tooltip', 'Icone con tooltip', [$this, 'am_icons_tooltip'], 'am_projects');
     }
 
     //Markup metabox no link
     public function am_project_subtitle_markup($post)
     {
-        //Creo nonce
-        wp_nonce_field('am_project_subtitle_action', 'am_project_subtitle_nonce');
-
         //Prendo valore salvato nel database
         $subtitle = get_post_meta($post->ID, 'am-project-subtitle', true);
     ?>
+    <form method="post">
+        <?php wp_nonce_field('am_project_nonce_action', 'am_project_nonce'); ?>
         <div id="am-project-subtitle">
             <label for="am-project-subtitle">Sottotitolo progetto</label>
             <input name="am-project-subtitle" type="text" id="am-project-subtitle" value="<?php echo $subtitle ?>" style="display:block; margin-top:10px">
         </div>
+    </form>
     <?php
     }
 
     //Markup metabox no link
     public function am_no_link_proj_box_markup($post)
     {
-        //Creo nonce
-        wp_nonce_field('am_no_link_metabox_action', 'am_no_link_metabox_nonce');
-
         //Prendo valore salvato nel database
         $no_link_value = get_post_meta($post->ID, 'no-link-select', true);
     ?>
+        <form method="post">
         <div id="no-link-box">
             <label for="no-link-select" style="display:block; font-weight:bold;">Seleziona interazione progetto</label>
             <select name="no-link-select" id="no-link-select" style="margin-top: 10px">
@@ -95,17 +93,16 @@ class AmProjectMetaBoxes
                     <option value="false" <?php selected($proj_spotlight, 'false'); ?>>Disattivato</option>
                 </select>
             </div>
-
-    <?php
+        <?php
         }
+        ?>
+        </form>
+    <?php
     }
 
     //Markup metabox dettagli progetto
     public function am_projects_details($post) 
     {
-        //Creo nonce
-        wp_nonce_field('am_projects_details_metabox_action', 'am_projects_details_metabox_nonce');
-
         //Recupero dati da db
         $committente = get_post_meta($post->ID, "projects-details-committente", true);
         $cliente = get_post_meta($post->ID, "projects-details-cliente", true);
@@ -117,52 +114,51 @@ class AmProjectMetaBoxes
         $complessita = get_post_meta($post->ID, "projects-details-complessita", true);
         $innovazione = get_post_meta($post->ID, "projects-details-innovazione", true);
     ?>
-    <div class="projects-details-box-wrapper" style="display: flex; flex-direction: column;">
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-committente" style="font-weight:bold">Committente</label>
-            <input name="projects-details-committente" id="projects-details-committente" type="text" style="display: block; margin-top: 10px;" value="<?php echo $committente ?>">
+    <form method="post">
+        <div class="projects-details-box-wrapper" style="display: flex; flex-direction: column;">
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-committente" style="font-weight:bold">Committente</label>
+                <input name="projects-details-committente" id="projects-details-committente" type="text" style="display: block; margin-top: 10px;" value="<?php echo $committente ?>">
+            </div>
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-cliente" style="font-weight:bold">Cliente</label>
+                <input name="projects-details-cliente" id="projects-details-cliente" type="text" style="display: block; margin-top: 10px" value="<?php echo $cliente ?>">
+            </div>
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-importo-lavori" style="font-weight:bold">Importo lavori</label>
+                <input name="projects-details-importo-lavori" id="projects-details-importo-lavori" type="text" style="display: block; margin-top: 10px" value="<?php echo $importo_lavori ?>">
+            </div>
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-anno" style="font-weight:bold">Anno</label>
+                <input name="projects-details-anno" id="projects-details-anno" type="number" style="display: block; margin-top: 10px" value="<?php echo $anno ?>">
+            </div>
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-luogo" style="font-weight:bold">Luogo</label>
+                <input name="projects-details-luogo" id="projects-details-luogo" type="text" style="display: block; margin-top: 10px" value="<?php echo $luogo ?>">
+            </div>
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-fase" style="font-weight:bold">Fase</label>
+                <input name="projects-details-fase" id="projects-details-fase" type="text" style="display: block; margin-top: 10px" value="<?php echo $fase ?>">
+            </div>
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-discipline" style="font-weight:bold">Discipline</label>
+                <input name="projects-details-discipline" id="projects-details-discipline" type="text" style="display: block; margin-top: 10px" value="<?php echo $discipline ?>">
+            </div>
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-complessita" style="font-weight:bold">Complessità (%)</label>
+                <input name="projects-details-complessita" id="projects-details-complessita" type="number" min="0" max="100" style="display: block; margin-top: 10px" value="<?php echo $complessita ?>">
+            </div>
+            <div id="projects-details-box" style="margin-top: 10px;">
+                <label for="projects-details-innovazione" style="font-weight:bold">Innovazione (%)</label>
+                <input name="projects-details-innovazione" id="projects-details-innovazione" type="number" min="0" max="100" style="display: block; margin-top: 10px" value="<?php echo $innovazione ?>">
+            </div>
         </div>
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-cliente" style="font-weight:bold">Cliente</label>
-            <input name="projects-details-cliente" id="projects-details-cliente" type="text" style="display: block; margin-top: 10px" value="<?php echo $cliente ?>">
-        </div>
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-importo-lavori" style="font-weight:bold">Importo lavori</label>
-            <input name="projects-details-importo-lavori" id="projects-details-importo-lavori" type="text" style="display: block; margin-top: 10px" value="<?php echo $importo_lavori ?>">
-        </div>
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-anno" style="font-weight:bold">Anno</label>
-            <input name="projects-details-anno" id="projects-details-anno" type="number" style="display: block; margin-top: 10px" value="<?php echo $anno ?>">
-        </div>
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-luogo" style="font-weight:bold">Luogo</label>
-            <input name="projects-details-luogo" id="projects-details-luogo" type="text" style="display: block; margin-top: 10px" value="<?php echo $luogo ?>">
-        </div>
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-fase" style="font-weight:bold">Fase</label>
-            <input name="projects-details-fase" id="projects-details-fase" type="text" style="display: block; margin-top: 10px" value="<?php echo $fase ?>">
-        </div>
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-discipline" style="font-weight:bold">Discipline</label>
-            <input name="projects-details-discipline" id="projects-details-discipline" type="text" style="display: block; margin-top: 10px" value="<?php echo $discipline ?>">
-        </div>
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-complessita" style="font-weight:bold">Complessità (%)</label>
-            <input name="projects-details-complessita" id="projects-details-complessita" type="number" min="0" max="100" style="display: block; margin-top: 10px" value="<?php echo $complessita ?>">
-        </div>
-        <div id="projects-details-box" style="margin-top: 10px;">
-            <label for="projects-details-innovazione" style="font-weight:bold">Innovazione (%)</label>
-            <input name="projects-details-innovazione" id="projects-details-innovazione" type="number" min="0" max="100" style="display: block; margin-top: 10px" value="<?php echo $innovazione ?>">
-        </div>
-    </div>
+    </form>
     <?php
     }
 
     public function am_secondary_image($post) 
-    {
-        //Creo nonce
-        wp_nonce_field('am_projects_secondary_image_action', 'am_projects_secondary_image_nonce');
-        
+    {    
         //Recupero immagine da db
         $secondary_image = get_post_meta($post->ID, 'am-project-secondary-image', true);    
         ?>
@@ -184,15 +180,14 @@ class AmProjectMetaBoxes
             </div>
         </div>
         
-        <input type="hidden" name="am-project-secondary-image" id="am-project-secondary-image" class="projects-images-hidden-input" value="<?php echo esc_attr($secondary_image)?>" />
+        <form method="post">
+            <input type="hidden" name="am-project-secondary-image" id="am-project-secondary-image" class="projects-images-hidden-input" value="<?php echo esc_attr($secondary_image)?>" />
+        </form>
         <?php
     }
 
-    public function am_gallery_markup($post) 
+    public function am_projects_gallery_markup($post) 
     {
-        //Creo nonce
-        wp_nonce_field('am_projects_gallery_metabox_action', 'am_projects_gallery_metabox_nonce');
-        
         //Recupero immagini da db
         $media_ids = get_post_meta($post->ID, 'projects-gallery-images', true);
         $media_ids_array = !empty($media_ids) ? explode(',', $media_ids) : array();
@@ -221,15 +216,14 @@ class AmProjectMetaBoxes
             </div>
         </div>
 
-        <input type="hidden" name="projects-gallery-images" id="projects-gallery-images" class="projects-images-hidden-input" value="<?php echo esc_attr($media_ids)?>" />
+        <form method="post">
+            <input type="hidden" name="projects-gallery-images" id="projects-gallery-images" class="projects-images-hidden-input" value="<?php echo esc_attr($media_ids)?>" />
+        </form>
         <?php
     }
 
     public function am_icons_tooltip($post) 
     {
-        //Creo nonce
-        wp_nonce_field('am_projects_icons_tooltip_metabox_action', 'am_projects_gallery_metabox_nonce');
-
         //Recupero immagini da db
         $icons_ids = get_post_meta($post->ID, 'projects-icons-tooltip-input', true);
         $icons_ids_array = !empty($icons_ids) ? explode(',', $icons_ids) : array();
@@ -256,34 +250,22 @@ class AmProjectMetaBoxes
             </div>
         </div>
 
-        <input type="hidden" name="projects-icons-tooltip-input" id="projects-icons-tooltip-input" class="projects-images-hidden-input" value="<?php echo esc_attr($icons_ids)?>" />
-        <input type="hidden" name="projects-icons-active" id="projects-icons-active" value="<?php echo esc_attr($icons_ids_active)?>" />
+        <form method="post">
+            <input type="hidden" name="projects-icons-tooltip-input" id="projects-icons-tooltip-input" class="projects-images-hidden-input" value="<?php echo esc_attr($icons_ids)?>" />
+            <input type="hidden" name="projects-icons-active" id="projects-icons-active" value="<?php echo esc_attr($icons_ids_active)?>" />
+        </form>
     <?php
     }
 
     //Metodo per salvare nel database i dati presi dal metabox
     public function am_save_project_subtitle($post_id, $post, $update) 
     {
-        //Controllo prima di inviare i dati...
-        //Se l'utente è abilitato a modificare i post
-        if (!current_user_can('edit_post', $post_id))
-
-            //Se il salvataggio non sia un autosalvataggio di WP
-            if (defined("DOING_AUTOSAVE") && DOING_AUTOSAVE)
-                return $post_id;
-
-        //Se il custom post type è esatto
-        $cpt_check = "am_projects";
-        if ($cpt_check != $post->post_type)
-            return $post_id;
-
-        if (is_null($_POST['am_project_subtitle_nonce']))
-            return $post_id;
+        $this->check_save_errors($post, $post_id, $update, 'am_projects');
 
         //Controllo Nonce
-        if ($update && !wp_verify_nonce($_POST['am_project_subtitle_nonce'], 'am_project_subtitle_action')) {
-            echo 'Errore, Nonce non verificato';
-            exit;
+        if ($update && (!isset($_POST['am_project_nonce']) || !wp_verify_nonce($_POST['am_project_nonce'], 'am_project_nonce_action')))
+        {
+            wp_die('Errore, Nonce non verificato');
         }
 
         //Procedo al salvataggio dei dati
@@ -298,27 +280,7 @@ class AmProjectMetaBoxes
     //Metodo per salvare nel database i dati presi dal metabox
     public function am_save_no_link_proj_box($post_id, $post, $update) 
     {
-        //Controllo prima di inviare i dati...
-        //Se l'utente è abilitato a modificare i post
-        if (!current_user_can('edit_post', $post_id))
-
-            //Se il salvataggio non sia un autosalvataggio di WP
-            if (defined("DOING_AUTOSAVE") && DOING_AUTOSAVE)
-                return $post_id;
-
-        //Se il custom post type è esatto
-        $cpt_check = "am_projects";
-        if ($cpt_check != $post->post_type)
-            return $post_id;
-
-        if (is_null($_POST['am_no_link_metabox_nonce']))
-            return $post_id;
-
-        //Controllo Nonce
-        if ($update && !wp_verify_nonce($_POST['am_no_link_metabox_nonce'], 'am_no_link_metabox_action')) {
-            echo 'Errore, Nonce non verificato';
-            exit;
-        }
+        $this->check_save_errors($post, $post_id, $update, 'am_projects');
 
         //Procedo al salvataggio dei dati
         $no_link_select_value = '';
@@ -362,27 +324,7 @@ class AmProjectMetaBoxes
     //Metodo per salvare nel database i dettagli del progetto
     public function am_save_projects_details($post_id, $post, $update) 
     {
-        //Controllo prima di inviare i dati...
-        //Se l'utente è abilitato a modificare i post
-        if (!current_user_can('edit_post', $post_id))
-
-            //Se il salvataggio non sia un autosalvataggio di WP
-            if (defined("DOING_AUTOSAVE") && DOING_AUTOSAVE)
-                return $post_id;
-
-        //Se il custom post type è esatto
-        $cpt_check = "am_projects";
-        if ($cpt_check != $post->post_type)
-            return $post_id;             
-
-        if (is_null($_POST['am_no_link_metabox_nonce']))
-            return $post_id;
-
-        //Controllo Nonce
-        if ($update && !wp_verify_nonce($_POST['am_projects_details_metabox_nonce'], 'am_projects_details_metabox_action')) {
-            echo 'Errore, Nonce non verificato';
-            exit;
-        }
+        $this->check_save_errors($post, $post_id, $update, 'am_projects');
 
         $committente = '';
         if (isset($_POST['projects-details-committente'])) {
@@ -449,8 +391,10 @@ class AmProjectMetaBoxes
     }
 
     //Salvataggio scelta galleria immagini
-    function am_save_secondary_image($post_id) 
+    function am_save_secondary_image($post_id, $post, $update) 
     {    
+        $this->check_save_errors($post, $post_id, $update, 'am_projects');
+
         if (isset($_POST['am-project-secondary-image'])) {
             $secondary_image = sanitize_text_field($_POST['am-project-secondary-image']); 
             update_post_meta($post_id, 'am-project-secondary-image', $secondary_image);
@@ -458,8 +402,10 @@ class AmProjectMetaBoxes
     }
 
     //Salvataggio scelta galleria immagini
-    function am_save_projects_gallery($post_id) 
+    function am_save_projects_gallery($post_id, $post, $update) 
     {    
+        $this->check_save_errors($post, $post_id, $update, 'am_projects', 'am_projects_gallery_metabox', $_POST);
+
         if (isset($_POST['projects-gallery-images'])) {
             $media_ids = sanitize_text_field($_POST['projects-gallery-images']); 
             update_post_meta($post_id, 'projects-gallery-images', $media_ids);
@@ -472,8 +418,10 @@ class AmProjectMetaBoxes
     }
 
     //Salvataggio icone con tooltip
-    function am_save_icons_tooltip($post_id) 
+    function am_save_icons_tooltip($post_id, $post, $update) 
     {    
+        $this->check_save_errors($post, $post_id, $update, 'am_projects');
+
         if (isset($_POST['projects-icons-tooltip-input'])) {
             $tooltips_ids = sanitize_text_field($_POST['projects-icons-tooltip-input']); 
             update_post_meta($post_id, 'projects-icons-tooltip-input', $tooltips_ids);
@@ -483,5 +431,19 @@ class AmProjectMetaBoxes
             $active_icons_ids = sanitize_text_field($_POST['projects-icons-active']); 
             update_post_meta($post_id, 'projects-icons-active', $active_icons_ids);
         }
+    }
+
+    private function check_save_errors($post, $post_id, $update, $cpt_name) {
+        //Controllo prima di inviare i dati...
+        //Se l'utente è abilitato a modificare i post
+        if (!current_user_can('edit_post', $post_id))
+
+            //Se il salvataggio non sia un autosalvataggio di WP
+            if (defined("DOING_AUTOSAVE") && DOING_AUTOSAVE)
+                return $post_id;
+
+        //Se il custom post type è esatto
+        if ($cpt_name != $post->post_type)
+            return $post_id;      
     }
 }
